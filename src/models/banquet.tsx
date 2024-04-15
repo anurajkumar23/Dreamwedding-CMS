@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+
 import Review from "./Review";
 
 const GallerySectionSchema = new Schema({
