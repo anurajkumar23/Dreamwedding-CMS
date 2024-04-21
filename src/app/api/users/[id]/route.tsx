@@ -1,4 +1,5 @@
 import User from "@/models/user";
+import { handleDelete, handlePatch } from "@/utils/request";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function DELETE(
@@ -6,19 +7,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-
-  try {
-    const user = await User.findByIdAndDelete(id);
-    return NextResponse.json({ message: "success", data: { user } });
-  } catch (error: any) {
-    console.error("Error:", error);
-
-    // If an error occurs, respond with an error message
-    return NextResponse.json(
-      { message: "error", error: error.message },
-      { status: 500 }
-    );
-  }
+  const user = await handleDelete(User, id, "user");
+  return user;
 }
 
 export async function PATCH(
@@ -26,21 +16,6 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-
-  const { email, username } = await req.json();
-  try{
-    const user = await User.findByIdAndUpdate(id, {
-        email,
-        username,
-      },{
-        new: true,
-        runValidators: true,
-      });
-      return NextResponse.json({ message: "success", data: { user } });
-
-  }catch(error){
-    console.error("Error:", error);
-  }
-
-
+  const user = await handlePatch(User, id, req, "user", ["email", "username"]);
+  return user;
 }
