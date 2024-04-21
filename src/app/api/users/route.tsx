@@ -11,6 +11,6 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const user = await handlePost(User, req, "user", ["email","password","username"]);
+  const user = await handlePost(User, req, "user" , "restricted", ["role"]);
   return user
 }
