@@ -62,8 +62,8 @@ export async function handleDelete<T extends Document>(
 
 export async function handlePatch<T extends Document>(
     Model: Model<T>,
-    id: string,
     req: NextRequest,
+    id: string,
     modelName: string,
     allowedFields: string[]
 ) {
