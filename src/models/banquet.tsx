@@ -30,7 +30,7 @@ const BanquetSchema = new Schema({
     min: 1,
     max: 5,
   },
-  location: String,
+  location: {city:String,pincode:String,area:String},
   locationUrl: String,
   description: String,
   price: Number,
