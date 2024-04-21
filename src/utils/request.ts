@@ -4,6 +4,26 @@ import { NextResponse,NextRequest } from "next/server";
 
 connectToDB()
 
+function parseRequiredFields(requestData: any, requestedFields: string[]) {
+    const parsedData: any = {};
+    requestedFields.forEach(field => {
+        if (requestData[field] !== undefined) {
+            parsedData[field] = requestData[field];
+        }
+    });
+    return parsedData;
+}
+
+function parseRestrictedFields(requestData: any, requestedFields: string[]) {
+    const parsedData = { ...requestData };
+    requestedFields.forEach(field => {
+        if (parsedData[field] !== undefined) {
+            delete parsedData[field];
+        }
+    });
+    return parsedData;
+}
+
 export async function handleGet(Model: Model<any, {}, {}>, modelName: string) {
     try {
         const users = await Model.find();
@@ -22,17 +42,20 @@ export async function handlePost<T extends Document>(
     Model: Model<T>,
     req: NextRequest,
     modelName: string,
+    validate: "required" | "restricted",
     requiredFields: string[]
 ) {
     try {
+
+        let parsedData;
+
         const requestData = await req.json();
-        const missingFields = requiredFields.filter(field => !requestData[field]);
-
-        if (missingFields.length > 0) {
-            return new NextResponse(`${missingFields.join(', ')} is required`, { status: 400 });
+        if (validate === "required") {
+            parsedData = parseRequiredFields(requestData, requiredFields);
+        } else if (validate === "restricted") {
+            parsedData = parseRestrictedFields(requestData, requiredFields);
         }
-
-        const createdData = await Model.create(requestData);
+        const createdData = await Model.create(parsedData);
 
         return NextResponse.json({ message: "success", data: { [modelName]: createdData } });
     } catch (error: any) {
@@ -65,24 +88,20 @@ export async function handlePatch<T extends Document>(
     req: NextRequest,
     id: string,
     modelName: string,
-    allowedFields: string[]
+    validate: "required" | "restricted",
+    requiredFields: string[]
 ) {
     try {
-        const requestData = await req.json();
-        const missingFields = allowedFields.filter(field => !requestData[field]);
+        let updatedData;
 
-        if (missingFields.length > 0) {
-            return new NextResponse(`${missingFields.join(', ')} is required`, { status: 400 });
+        const requestData = await req.json();
+        if (validate === "required") {
+            updatedData = parseRequiredFields(requestData, requiredFields);
+        } else if (validate === "restricted") {
+            updatedData = parseRestrictedFields(requestData, requiredFields);
         }
 
-        const updatedFields: any = {};
-        allowedFields.forEach(field => {
-            if (requestData[field] !== undefined) {
-                updatedFields[field] = requestData[field];
-            }
-        });
-
-        const updatedItem = await Model.findByIdAndUpdate(id, updatedFields, {
+        const updatedItem = await Model.findByIdAndUpdate(id, updatedData, {
             new: true,
             runValidators: true,
         });
@@ -94,6 +113,19 @@ export async function handlePatch<T extends Document>(
         return NextResponse.json({ message: "success", data: { [modelName]: updatedItem } });
     } catch (error: any) {
         console.error(`Error updating ${modelName}:`, error);
+        return NextResponse.json({ message: "error", error: error.message }, { status: 500 });
+    }
+}
+
+export async function handleGetById(Model: Model<any, {}, {}>,    id: string, modelName: string) {
+    try {
+        const users = await Model.findById(id);
+        return NextResponse.json({
+            message: "success",
+            data: { [modelName]: users },
+        });
+    } catch (error: any) {
+        console.error(`Error fetching ${modelName}:`, error);
         return NextResponse.json({ message: "error", error: error.message }, { status: 500 });
     }
 }
