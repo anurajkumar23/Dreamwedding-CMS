@@ -1,4 +1,6 @@
+import banquetMiddleware from "@/app/middleware/Banquet/banquetMiddleware";
 import Banquet from "@/models/banquet";
+import { filter } from "@/utils/filterMiddleware";
 
 import { handleDelete, handleGetById, handlePatch } from "@/utils/request";
 import upload from "@/utils/upload";
@@ -9,12 +11,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
-
-    // Upload the file and get the filename
-    const billboard = await upload(req, "banquet");
-    console.log("🚀 ~ data:", billboard);
-  
-    const banquet = await handlePatch(Banquet, req, id, "banquet", "restricted", ["rating", "like", "contactUs", "reviews"]);
+    const updatedData = await banquetMiddleware(req)
+    const banquet = await handlePatch(Banquet, id, "banquet" ,updatedData );
     return banquet;
   } catch (error) {
     console.error("Error occurred:", error);
