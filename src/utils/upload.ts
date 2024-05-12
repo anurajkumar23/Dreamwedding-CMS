@@ -17,7 +17,7 @@ export default async function upload(file:any,folder: string) {
 
     const filename = `${folder}-${Date.now()}.jpeg`;
 
-    const path = join("public", "images", "banquet", filename);
+    const path = join("public", "images", folder, filename);
 
     writeFileSync(path, buffer);
     return filename;
