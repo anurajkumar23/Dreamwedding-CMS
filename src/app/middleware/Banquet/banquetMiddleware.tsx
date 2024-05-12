@@ -15,8 +15,8 @@ export default async function banquetMiddleware(req: Request) {
     "reviews",
   ]);
 
-  console.log(Data, "ishu");
-  console.log(filename, "filename");
+  // console.log(Data, "ishu");
+  // console.log(filename, "filename");
 
   let updatedData;
 
@@ -25,6 +25,6 @@ export default async function banquetMiddleware(req: Request) {
   } else {
     updatedData = Data;
   }
-  console.log(updatedData, "updatedData");
+  // console.log(updatedData, "updatedData");
   return updatedData;
 }
