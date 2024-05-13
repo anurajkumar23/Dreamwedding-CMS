@@ -2,13 +2,13 @@ import { Schema, model, models } from "mongoose";
 
 import Review from "./Review";
 
-const GallerySectionSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  photos: [String],
-});
+// const GallerySectionSchema = new Schema({
+//   name: {
+//     type: String,
+//     required: true,
+//   },
+//   photos: [String],
+// });
 
 const BanquetSchema = new Schema({
   photo: [
@@ -59,12 +59,14 @@ const BanquetSchema = new Schema({
   openHours: {
     type: String,
   },
-  operatingDays: {
-    type: [String],
-    enum: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    default: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  },
-  gallery: [GallerySectionSchema],
+  operatingDays: String,
+  gallery: [{
+    name: {
+      type: String,
+      required: true,
+    },
+    photos: [String],
+  }],
 });
 
 const Banquet = models.Banquet || model("Banquet", BanquetSchema);

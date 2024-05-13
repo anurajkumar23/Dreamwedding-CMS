@@ -39,6 +39,4 @@ export async function GET(
     return user;
   }
 
-function xyz() {
-  throw new Error("Function not implemented.");
-}
+
