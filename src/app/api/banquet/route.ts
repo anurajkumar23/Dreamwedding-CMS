@@ -14,7 +14,7 @@ export async function GET(){
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const banquet = await handlePost(Banquet, req, "banquet","restricted", ["rating","like","contactUs","reviews"]);
+    const banquet = await handlePost(Banquet, req, "banquet","restricted", ["rating","like","contactUs","reviews","gallery"]);
     return banquet
   }
 
