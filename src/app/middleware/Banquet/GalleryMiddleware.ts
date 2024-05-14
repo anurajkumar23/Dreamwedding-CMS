@@ -4,11 +4,11 @@ import upload from "@/utils/upload";
 
 export default async function GalleryMiddleware(req: Request) {
   const data = await req.formData();
-  console.log("🚀 ~ banquetMiddleware ~ data:", data)
+  console.log("🚀 ~ GalleryMiddleware ~ data:", data)
 
 
 
-  const filename = await multipleupload(data, "banquet");
+  const filename = await multipleupload(data, "photographer");
   console.log("🚀 ~ GalleryMiddleware ~ filename:", filename)
 
 
