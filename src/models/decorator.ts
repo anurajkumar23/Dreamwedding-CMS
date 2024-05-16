@@ -41,6 +41,6 @@ const DecoratorSchema = new Schema({
  
 });
 
-const Decorator = models.Photographer || model("Decorator", DecoratorSchema);
+const Decorator = models.Decorator || model("Decorator", DecoratorSchema);
 
 export default Decorator;
