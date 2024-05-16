@@ -43,21 +43,19 @@ export async function handleGet(Model: Model<any, {}, {}>, modelName: string) {
 
 export async function handlePost<T extends Document>(
   Model: Model<T>,
-  req: NextRequest,
+  updatedData:any,
   modelName: string,
-  validate: "required" | "restricted",
-  requiredFields: string[]
 ) {
   try {
-    let parsedData;
+    // let parsedData;
 
-    const requestData = await req.json();
-    if (validate === "required") {
-      parsedData = parseRequiredFields(requestData, requiredFields);
-    } else if (validate === "restricted") {
-      parsedData = parseRestrictedFields(requestData, requiredFields);
-    }
-    const createdData = await Model.create(parsedData);
+    // const requestData = await req.json();
+    // if (validate === "required") {
+    //   parsedData = parseRequiredFields(requestData, requiredFields);
+    // } else if (validate === "restricted") {
+    //   parsedData = parseRestrictedFields(requestData, requiredFields);
+    // }
+    const createdData = await Model.create(updatedData);
 
     return NextResponse.json({
       message: "success",

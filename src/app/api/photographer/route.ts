@@ -1,3 +1,4 @@
+import photographerMiddleware from "@/app/middleware/Photographer/PhotographerMiddleware";
 import Photographer from "@/models/photographer";
 import { connectToDB } from "@/utils/database";
 import { handleGet, handlePost } from "@/utils/request";
@@ -15,6 +16,7 @@ export async function GET(){
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const photographer = await handlePost(Photographer, req, "photographer","restricted", ["rating","like","contactUs","reviews","gallery"]);
+    const updatedData = await photographerMiddleware(req)
+    const photographer = await handlePost(Photographer, updatedData, "photographer");
     return photographer
   }

@@ -2,8 +2,9 @@ import { filter } from "@/utils/filterMiddleware";
 import upload from "@/utils/upload";
 
 export default async function banquetMiddleware(req: Request) {
+  console.log(req)
   const data = await req.formData();
-
+  console.log(data,"data")
   const file = data.get("billboard");
 
   const filename = await upload(file, "banquet");
