@@ -20,7 +20,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
     return NextResponse.json({
       message: "success",
-      data: { caterer: updatedData },
+      data: { "caterer": updatedData },
     });
   } catch (error: any) {
     console.error(`Error updating Caterer:`, error);
