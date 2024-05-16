@@ -2,6 +2,7 @@ import Banquet from "@/models/banquet";
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 connectToDB();
+
 export async function handleNewFolderPatch(id: string, newGalleryObject: { name: string; photos: string[] }) {
   try {
     const updatedItem = await Banquet.findOneAndUpdate(

@@ -2,13 +2,13 @@ import { filter } from "@/utils/filterMiddleware";
 import multipleupload from "@/utils/multipleupload";
 import upload from "@/utils/upload";
 
-export default async function GalleryMiddleware(req: Request) {
+export default async function GalleryMiddleware(req: Request,folder:string) {
   const data = await req.formData();
   console.log("🚀 ~ GalleryMiddleware ~ data:", data)
 
 
 
-  const filename = await multipleupload(data, "photographer");
+  const filename = await multipleupload(data, folder);
   console.log("🚀 ~ GalleryMiddleware ~ filename:", filename)
 
 

@@ -1,3 +1,4 @@
+import banquetMiddleware from "@/app/middleware/Banquet/banquetMiddleware";
 import Banquet from "@/models/banquet";
 import { connectToDB } from "@/utils/database";
 
@@ -14,7 +15,8 @@ export async function GET(){
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const banquet = await handlePost(Banquet, req, "banquet","restricted", ["rating","like","contactUs","reviews","gallery"]);
+    const updatedData = await banquetMiddleware(req)
+    const banquet = await handlePost(Banquet, updatedData, "banquet");
     return banquet
   }
 
