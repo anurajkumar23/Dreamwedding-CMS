@@ -37,7 +37,10 @@ const DecoratorSchema = new Schema({
     maxlength: 255,
   },
 
- photos:[String]
+  photos: {
+    type: [String],
+    default: [], 
+  },
  
 });
 

@@ -1,19 +1,19 @@
 import GalleryMiddleware from "@/app/middleware/Banquet/GalleryMiddleware";
-import Banquet from "@/models/banquet";
 import { NextRequest, NextResponse } from "next/server";
-import { handleNewFolderPatch } from "./handleNewFolder";
+import { handleFolderPatch } from "./handleFolderPatch";
 
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+
+export async function PATCH(req: NextRequest, { params }: { params: { banquetId: string , galleryId:string} }) {
     try {
-      const { id } = params;
-      console.log("🚀 ~ PATCHGallery MIddleware~ id:", id)
+      const { banquetId,galleryId } = params;
+    
+      // console.log("🚀 ~ PATCHGallery MIddleware~ id:", banquetId,galleryId )
       const newGalleryObject = await GalleryMiddleware(req,"banquet")
-      const banquet = await handleNewFolderPatch(id, newGalleryObject );
+      const banquet = await handleFolderPatch(banquetId,galleryId, newGalleryObject );
       return banquet;
     } catch (error) {
       console.error("Error occurred:", error);
       return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
     }
   }
-

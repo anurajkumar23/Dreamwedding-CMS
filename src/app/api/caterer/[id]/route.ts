@@ -4,10 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 connectToDB();
 
-
-
-
-
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;

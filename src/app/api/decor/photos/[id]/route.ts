@@ -2,17 +2,17 @@ import GalleryMiddleware from "@/app/middleware/Banquet/GalleryMiddleware";
 import DecoratorMiddleware from "@/app/middleware/decor/DecorMiddleware";
 import Decorator from "@/models/decorator";
 import { NextRequest, NextResponse } from "next/server";
-import { handlePostPhoto } from "./handlePostPhoto";
+import { handlePatchPhoto } from "./handlePatchPhoto";
 
 
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
     try {
       const { id } = params;
       console.log("🚀 ~ PATCHGallery MIddleware~ id:", id)
       const newGalleryObject = await GalleryMiddleware(req,"decorator")
 
-      const decorator = await handlePostPhoto(id, newGalleryObject );
+      const decorator = await handlePatchPhoto(id, newGalleryObject );
       return decorator;
     } catch (error) {
       console.error("Error occurred:", error);
