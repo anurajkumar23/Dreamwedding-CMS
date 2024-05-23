@@ -1,7 +1,7 @@
 import photographerMiddleware from "@/app/middleware/Photographer/PhotographerMiddleware";
 import Photographer from "@/models/photographer";
 import { connectToDB } from "@/utils/database";
-import { handleDelete, handleGet, handlePatch, handlePost } from "@/utils/request";
+import { handleDelete, handleGet, handleGetById, handlePatch, handlePost } from "@/utils/request";
 
 
 import { NextRequest, NextResponse } from "next/server";
@@ -30,3 +30,13 @@ export async function DELETE(
       return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
     }
   }
+
+  export async function GET(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+  ) {
+    const { id } = params;
+    const user = await handleGetById(Photographer, id, "photographer");
+    return user;
+  }
+  

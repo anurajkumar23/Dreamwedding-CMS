@@ -1,5 +1,6 @@
 import Caterer from "@/models/caterer";
 import { connectToDB } from "@/utils/database";
+import { handleGetById } from "@/utils/request";
 import { NextRequest, NextResponse } from "next/server";
 
 connectToDB();
@@ -45,4 +46,13 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       { status: 500 }
     );
   }
+}
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+  const user = await handleGetById(Caterer, id, "caterer");
+  return user;
 }
