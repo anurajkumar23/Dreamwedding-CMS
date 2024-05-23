@@ -35,3 +35,13 @@ export async function DELETE(
   const user = await handleDelete(Decorator, id, "decorator");
   return user;
 }
+
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+  const user = await handleGetById(Decorator, id, "decorator");
+  return user;
+}
