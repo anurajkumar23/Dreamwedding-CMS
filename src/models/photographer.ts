@@ -1,6 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 import Review from "./Review";
+import { features } from "process";
 
 
 const PhotographerSchema = new Schema({
@@ -19,7 +20,9 @@ const PhotographerSchema = new Schema({
   },
   location: { city: String, pincode: String, area: String },
   locationUrl: String,
-  description: String,
+  outerdescription: String,
+  innerdescription:String,
+  feature:[String],
   price: [Number],
   like: [
     {
@@ -47,6 +50,11 @@ const PhotographerSchema = new Schema({
       photos: [String],
     },
   ],
+  photos: {
+    type: [String],
+    default: [], 
+  },
+ 
 });
 
 const Photographer = models.Photographer || model("Photographer", PhotographerSchema);
