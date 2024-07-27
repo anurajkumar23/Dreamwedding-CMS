@@ -10,7 +10,8 @@ const DecoratorSchema = new Schema({
     required: [true, "Name is required!"],
     maxlength: 40,
   },
-  description:String,
+  innerdescription:String,
+  outerdescription:String,
   rating: {
     type: Number,
     required: true,

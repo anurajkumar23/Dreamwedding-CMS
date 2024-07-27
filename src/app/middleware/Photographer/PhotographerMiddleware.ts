@@ -2,8 +2,10 @@ import { filter } from "@/utils/filterMiddleware";
 import upload from "@/utils/upload";
 
 export default async function photographerMiddleware(req: Request) {
+  
   const data = await req.formData();
-
+ 
+ 
   const file = data.get("billboard");
 
   const filename = await upload(file, "photographer");

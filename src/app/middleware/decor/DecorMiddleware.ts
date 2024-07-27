@@ -2,6 +2,7 @@ import { filter } from "@/utils/filterMiddleware";
 import upload from "@/utils/upload";
 
 export default async function decoratorMiddleware(req: Request) {
+  console.log(req.headers)
   const data = await req.formData();
  
 
