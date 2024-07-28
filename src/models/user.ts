@@ -61,7 +61,7 @@ UserSchema.methods.correctPassword = async function (
   return await argon2.verify(userPassword, candidatePassword);
 };
 
-UserSchema.methods.changedPasswordAfter = function(JWTTimestamp: number) {
+UserSchema.methods.changedPasswordAfter = function(JWTTimestamp: number): boolean {
   if (this.passwordChangedAt) {
     const changedTimestamp = Math.floor(this.passwordChangedAt.getTime() / 1000);
     return JWTTimestamp < changedTimestamp;
