@@ -1,7 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { UserButton } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
 import { BadgeIndianRupee, ShoppingBag, UserRound } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import React from 'react'
