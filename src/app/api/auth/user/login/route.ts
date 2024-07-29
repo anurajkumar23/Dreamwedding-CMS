@@ -1,13 +1,15 @@
-// pages/api/login.js
+// pages/api/login/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 import signToken from '@/app/middleware/auth/token';
 import User from '@/models/user';
-import { NextRequest, NextResponse } from 'next/server';
 import { setCookie, setResponseHeaders } from '../signup/route';
+import { connectToDB } from '@/utils/database';
 
 
+connectToDB();
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    const { email, password }: { email: string; password: string } = await req.json();
     
     if (!email || !password) {
       return NextResponse.json({ success: false, message: 'Please provide email and password' }, { status: 400 });
@@ -28,7 +30,7 @@ export async function POST(req: NextRequest) {
     user.password = undefined;
 
     return new NextResponse(
-      JSON.stringify({ success: true, token,  user  }),
+      JSON.stringify({ success: true, token, user }),
       {
         status: 200,
         headers: {
@@ -40,6 +42,6 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }
 }
