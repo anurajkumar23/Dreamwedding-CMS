@@ -24,6 +24,10 @@ const UserSchema = new Schema({
   image: {
     type: String,
   },
+  address:String,
+  pincode:Number,
+  city:String,
+  state:String,
   name: {
     type: String,
   },
