@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-  
     "@radix-ui/react-separator": "^1.0.3",
     "@types/formidable": "^3.4.5",
     "argon2": "^0.40.3",
