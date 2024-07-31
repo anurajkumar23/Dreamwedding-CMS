@@ -16,7 +16,7 @@ const TopBar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-0 z-20 w-full flex justify-between items-center px-8 py-4 bg-blue-2 shadow-xl lg:hidden">
+    <div className="sticky top-0 z-20 w-full flex justify-between items-center px-8 py-4 bg-[#E9F5FE] shadow-xl lg:hidden">
       <Image src={logo} alt="logo" width={200} height={70} priority={false} loading="lazy"/>
 
       <div className="flex gap-8 max-md:hidden">
@@ -24,7 +24,7 @@ const TopBar = () => {
           <Link
             href={link.url}
             key={link.label}
-            className={`flex gap-4 text-body-medium ${pathname === link.url ? "text-red-600" : "text-grey-1"}`}
+            className={`flex gap-4 text-body-medium ${pathname === link.url ? "text-red-600" : "text-[#616161]"}`}
           >
             <p>{link.label}</p>
           </Link>
