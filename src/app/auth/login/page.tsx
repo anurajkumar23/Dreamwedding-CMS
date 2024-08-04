@@ -5,7 +5,7 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-sm w-full space-y-6 p-10 bg-white rounded-xl shadow-lg">
-      <Image src={logo} alt="logo" width={200} height={70} priority={false} loading="lazy"/>
+        <Image src={logo} alt="logo" width={200} height={70} priority={false} loading="lazy" />
         <div className='gap-y-2'>
           <h1 className="text-2xl font-bold text-gray-900">
             Sign in
