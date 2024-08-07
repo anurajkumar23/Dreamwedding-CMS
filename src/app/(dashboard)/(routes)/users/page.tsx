@@ -5,10 +5,21 @@ import User from "@/models/user";
 import { UserColumn } from "./components/columns";
 import { UserClient } from "./components/client";
 
-const UserPage = async ({ params }) => {
+
+interface UserDocument {
+  _id: string;
+  phone: string;
+  name: string;
+  role: string;
+  email: string;
+  address: string;
+  createdAt: Date;
+}
+
+const UserPage = async () => {
   await connectToDB();
 
-  const users = await User.find({ params }).sort({ createdAt: -1 }).lean();
+  const users:UserDocument[] = await User.find().sort({ createdAt: -1 }).lean();
 
   const formattedUsers: UserColumn[] = users.map((item) => ({
     id: item._id.toString(),
