@@ -30,7 +30,7 @@ const LeftSideBar: React.FC = () => {
                 <a
                   href={link.url}
                   onClick={handleCategoryClick}
-                  className={`flex gap-4 text-body-medium ${
+                  className={`flex gap-4  ${
                     categoryOpen ? "text-red-600" : "text-[#616161]"
                   }`}
                 >
@@ -42,7 +42,7 @@ const LeftSideBar: React.FC = () => {
                       <Link
                         href={innerLink.url}
                         key={innerLink.label}
-                        className={`flex gap-4 text-body-medium ${
+                        className={`flex gap-4  ${
                           pathname === innerLink.url ? "text-red-600" : "text-[#616161]"
                         }`}
                       >
@@ -55,7 +55,7 @@ const LeftSideBar: React.FC = () => {
             ) : (
               <Link
                 href={link.url}
-                className={`flex gap-4 text-body-medium ${
+                className={`flex gap-4  ${
                   pathname === link.url ? "text-red-600" : "text-[#616161]"
                 }`}
               >
@@ -66,7 +66,7 @@ const LeftSideBar: React.FC = () => {
         ))}
       </div>
 
-      <div className="flex gap-4 text-body-medium items-center">
+      <div className="flex gap-4  items-center">
         <p>Edit Profile</p>
       </div>
     </div>
