@@ -12,19 +12,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { DecoratorColumn } from "./columns";
+import { PhotographerColumn } from "./columns";
 
 interface CellActionProps {
-  data: DecoratorColumn;
+  data: PhotographerColumn;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({
-  data,
-}) => {
+export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,11 +30,11 @@ export const CellAction: React.FC<CellActionProps> = ({
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/decor/${data.id}`);
-      toast.success('Decorator deleted.');
+      await axios.delete(`/api/photographer/${data.id}`);
+      toast.success("Photographer deleted.");
       router.refresh();
     } catch (error) {
-      toast.error('Something went wrong.');
+      toast.error("Error deleting photographer.");
     } finally {
       setOpen(false);
       setLoading(false);
@@ -45,8 +43,8 @@ export const CellAction: React.FC<CellActionProps> = ({
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Decorator ID copied to clipboard.');
-  }
+    toast.success("Photographer ID copied to clipboard.");
+  };
 
   return (
     <>
@@ -67,9 +65,6 @@ export const CellAction: React.FC<CellActionProps> = ({
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
             <Copy className="mr-2 h-4 w-4" /> Copy Id
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`/decor/${data.id}`)}>
-            <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete

@@ -1,8 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
 import { CellAction } from "./cell-action";
+import { ImageCell } from "./image-cell";
 
 export type DecoratorColumn = {
   id: string;
@@ -42,6 +42,10 @@ export const columns: ColumnDef<DecoratorColumn>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    cell: ({ row }) => {
+      const price = row.original.price;
+      return `${price[0]} - ${price[price.length - 1]}`;
+    },
   },
   {
     accessorKey: "yearOfEstd",
@@ -51,10 +55,11 @@ export const columns: ColumnDef<DecoratorColumn>[] = [
     accessorKey: "contactUs",
     header: "Contact Number",
   },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-  },
+  // {
+  //   accessorKey: "photos",
+  //   header: "Photos",
+  //   cell: ({ row }) => <ImageCell images={row.original.photos} />,
+  // },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
