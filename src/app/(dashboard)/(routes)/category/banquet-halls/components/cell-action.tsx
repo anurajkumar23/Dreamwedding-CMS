@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { UserColumn } from "./columns";
+import { BanquetColumn } from "./columns";
 
 interface CellActionProps {
-  data: UserColumn;
+  data: BanquetColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({
@@ -32,7 +32,7 @@ export const CellAction: React.FC<CellActionProps> = ({
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/users/${data.id}`);
+      await axios.delete(`/api/banquet/${data.id}`);
       toast.success('User deleted.');
       router.refresh();
     } catch (error) {

@@ -1,13 +1,65 @@
-import { Separator } from '@/components/ui/separator'
-import React from 'react'
+// pages/dashboard/banquets/index.tsx
+import { connectToDB } from "@/utils/database";
+import Banquet from "@/models/banquet";
+import { BanquetColumn } from "./components/columns";
+import { BanquetClient } from "./components/client";
 
-const page = () => {
-  return (
-    <div className="px-8 py-10">
-    <p className="text-heading2-bold text-white">BanquetHall Data</p>
-    <Separator className="bg-white my-5" />
-    </div>
-  )
+// Define the interface for the Banquet document
+interface BanquetDocument {
+  _id: string;
+  name: string;
+  rating: number;
+  location: {
+    city: string;
+    pincode: string;
+    area: string;
+  } | null; // Allow location to be null
+  description: string;
+  price: number;
+  capacity: number;
+  type: string;
+  yearOfEstd: number;
+  // Add other fields that you want to display
+  contactUs: number;
+  specialFeature: string[];
+  availability: string[];
+  operatingDays: string;
+  openHours: string;
+  createdAt: Date;
 }
 
-export default page
+const BanquetPage = async () => {
+  await connectToDB();
+
+  const banquets: BanquetDocument[] = await Banquet.find().lean();
+
+  const formattedBanquets: BanquetColumn[] = banquets.map((item) => ({
+    id: item._id.toString(),
+    name: item.name,
+    rating: item.rating,
+    location: item.location
+      ? `${item.location.city || 'N/A'}, ${item.location.area || 'N/A'}, ${item.location.pincode || 'N/A'}`
+      : 'Location not specified',
+    description: item.description,
+    price: item.price,
+    capacity: item.capacity,
+    type: item.type,
+    yearOfEstd: item.yearOfEstd,
+    contactUs: item.contactUs,
+    specialFeature: item.specialFeature.join(", "),
+    availability: item.availability.join(", "),
+    operatingDays: item.operatingDays,
+    openHours: item.openHours,
+    createdAt: item.createdAt ? item.createdAt.toISOString().split('T')[0] : "N/A",
+  }));
+
+  return (
+    <div className="flex-col">
+      <div className="flex-1 space-y-4 p-8 pt-6 text-white">
+        <BanquetClient data={formattedBanquets} />
+      </div>
+    </div>
+  );
+};
+
+export default BanquetPage;
