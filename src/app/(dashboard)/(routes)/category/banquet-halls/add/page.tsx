@@ -33,12 +33,8 @@ const initialValues: FormValues = {
 };
 
 
-
- 
-
-
-export default function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function Page() {
+  
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
 
@@ -143,7 +139,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-semibold text-white mb-6">
-        Add New Banquet {id} {query}
+        Add New Banquet 
       </h1>
       <form
         onSubmit={formik.handleSubmit}

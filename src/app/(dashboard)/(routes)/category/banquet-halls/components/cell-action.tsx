@@ -48,7 +48,7 @@ export const CellAction: React.FC<CellActionProps> = ({
     toast.success('User ID copied to clipboard.');
   }
   function handleClick(query:string){
-    router.push(`/category/banquet-halls/${data.id}?query=${query}`)
+    router.push(`/category/banquet-halls/add/?query=${query}`)
 
   }
 
