@@ -30,27 +30,56 @@ const BanquetSchema = new Schema({
     min: 1,
     max: 5,
   },
-  location: {city:String,pincode:String,area:String},
-  locationUrl: String,
-  description: String,
-  price: Number,
+  location: {
+    city: {
+      type: String,
+      required: [true, 'Location city is required'],
+    },
+    pincode: {
+      type: String,
+      required: [true, 'Location pincode is required'],
+    },
+    area: {
+      type: String,
+      required: [true, 'Location area is required'],
+    },
+  },
+  locationUrl: {type:String , required:[true,"location Url is required"]},
+  description:{type:String , required:[true,"Description is required"]},
+  price:{type:Number , required:[true,"Price is required"]},
   like: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  capacity: Number,
+  capacity:{type:Number , required:[true,"total people Handling Capacity is required"]},
   specialFeature: [String],
-  contactUs: Number,
-  yearOfEstd: Number,
-  services: [String],
+  contactUs: {type:Number , required:[true,"Contact is required"]},
+  yearOfEstd:  {type:Number , required:[true,"year Of Estd. is required"]},
+  services: {
+    type: [String],
+    validate: {
+      validator: function (array:string) {
+        return array.length > 0;
+      },
+      message: 'At least one service is required',
+    },
+  },
   type: {
     type: String,
     enum: ["AC", "Non-AC"],
     default: "AC",
   },
-  availability: [String],
+  availability: {
+    type: [String],
+    validate: {
+      validator: function (array:string) {
+        return array.length > 0;
+      },
+      message: 'At least one availability is required',
+    },
+  },
   reviews: [Review.schema],
   billboard: {
     type: String,
@@ -58,12 +87,15 @@ const BanquetSchema = new Schema({
   },
   openHours: {
     type: String,
+    required: [true, "Open Hours is required!"],
+    
   },
-  operatingDays: String,
+  operatingDays: {type:String , required:[true,"operatingDays is required" ], uppercase:true},
   gallery: [{
     name: {
       type: String,
       required: true,
+      default:"photos"
     },
     photos: [String],
   }],

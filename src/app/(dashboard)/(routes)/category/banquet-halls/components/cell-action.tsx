@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -47,6 +47,10 @@ export const CellAction: React.FC<CellActionProps> = ({
     navigator.clipboard.writeText(id);
     toast.success('User ID copied to clipboard.');
   }
+  function handleClick(query:string){
+    router.push(`/category/banquet-halls/${data.id}?query=${query}`)
+
+  }
 
   return (
     <>
@@ -70,6 +74,9 @@ export const CellAction: React.FC<CellActionProps> = ({
           >
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={()=>handleClick('add')}><Edit className="mr-2 h-4 w-4"/>Edit/Add </DropdownMenuItem>
+
           <DropdownMenuItem
             onClick={() => setOpen(true)}
           >

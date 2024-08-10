@@ -13,3 +13,19 @@
 body{
     background-color:  var(--bg);
 }
+
+input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  /* Hide the arrows in Chrome, Safari, Edge, and Opera */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* Optionally, hide the arrows in Internet Explorer */
+  input[type="number"] {
+    -ms-appearance: textfield;
+  }
