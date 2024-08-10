@@ -90,10 +90,7 @@ const BanquetSchema = new Schema({
     
   },
   operatingDays: {type:String , required:[true,"operatingDays is required" ], uppercase:true},
-  gallery: [{
-    name: String,
-    photos: [String],
-  }],
+  gallery: [{name: String, photos: [String]}],
   // createdAt: { type: Date, default: Date.now },
 });
 
