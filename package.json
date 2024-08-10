@@ -23,6 +23,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
+    "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.394.0",
     "micro-cors": "^0.1.1",
@@ -36,7 +37,8 @@
     "sharp": "^0.33.3",
     "svix": "^1.24.0",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",

@@ -9,7 +9,7 @@ interface DashboardLayout {
 
 const UserLayout: React.FC<DashboardLayout> = ({ children }) => {
   return (
-    <div className='flex max-lg:flex-col'>
+    <div className='flex max-lg:flex-col '>
       <LeftSideBar />
       <TopBar/>
       <div className='flex-1'>

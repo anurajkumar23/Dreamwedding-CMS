@@ -54,11 +54,12 @@ const BanquetPage = async () => {
   }));
 
   return (
-    <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6 text-white">
-        <BanquetClient data={formattedBanquets} />
-      </div>
+    <div className="px-4 w-full max-w-screen-xl mx-auto">
+    <div className="space-y-4 pt-6 text-white">
+      <BanquetClient data={formattedBanquets} />
     </div>
+  </div>
+  
   );
 };
 
