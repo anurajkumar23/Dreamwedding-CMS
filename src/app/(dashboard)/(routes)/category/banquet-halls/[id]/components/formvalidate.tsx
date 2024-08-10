@@ -35,9 +35,6 @@ const validationSchema = Yup.object({
       'Capacity must be at most 4 digits long',
       value => !value || (value.toString().length <= 4)
     ),
-  contactUs: Yup.string()
-    .required('Contact Us information is required')
-    .matches(/^\d{10}$/, 'Contact Us must be exactly 10 digits'),
   yearOfEstd: Yup.number()
     .required('Year of Establishment is required')
     .positive('Year must be a positive number')
@@ -86,9 +83,7 @@ export const getValidationSchema = (step: number) => {
             'Capacity must be at most 4 digits long',
             value => !value || (value.toString().length <= 4)
           ),
-        contactUs: Yup.string()
-          .required('Contact Us information is required')
-          .matches(/^\d{10}$/, 'Contact Us must be exactly 10 digits'),
+      
         yearOfEstd: Yup.number()
           .required('Year of Establishment is required')
           .positive('Year must be a positive number')

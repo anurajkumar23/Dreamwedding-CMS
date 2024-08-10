@@ -5,65 +5,100 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useFormik } from "formik";
 import { getValidationSchema } from "./components/formvalidate";
 // import { AddbanquetSchema } from "./components/formvalidate";
+import { postBanquet as FormValues } from "../../../../../../interfaces/banquet";
+import axios from "axios";
+import { connectToDB } from "@/utils/database";
+connectToDB()
 
-interface FormValues {
-  name: string;
-  location: {
-    city: string;
-    pincode: string;
-    area: string;
-  };
-  services: string[];
-  locationUrl: string;
-  description: string;
-  price: number | string;
-  capacity: number | string;
-  specialFeature: string[];
-  contactUs: string;
-  yearOfEstd: number | string;
-  availability: string[];
-  billboard: string;
-  openHours: string;
-  operatingDays: string;
-  type: string;
-}
 
 const initialValues: FormValues = {
-    name: "",
-    location: {
-        city: "",
-        pincode: "",
-        area: "",
-    },
-    services: [""],
-    locationUrl: "",
-    description: "",
-    price: "",
-    capacity: "",
-    specialFeature: [""],
-    contactUs: "",
-    yearOfEstd: "",
-    availability: [""],
-    openHours: "",
-    operatingDays: "",
-    type: "AC",
-    billboard: ""
+  name: "",
+  location: {
+    city: "",
+    pincode: "",
+    area: "",
+  },
+  services: [""],
+  description: "",
+  price: "",
+  capacity: "",
+  specialFeature: [""],
+  
+  yearOfEstd: "",
+  availability: [""],
+  openHours: "",
+  operatingDays: "",
+  type: "AC",
+  billboard: "",
 };
+
+
+
+ 
+
 
 export default function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
-  const router = useRouter();
+
 
   const [currentStep, setCurrentStep] = useState(1);
+
+  async function postBanquet(values: FormValues) {
+    console.log("formData Entered")
+      const formData = new FormData();
+  
+      // Append simple fields to formData
+      formData.append('name', values.name);
+      formData.append('location', JSON.stringify(values.location));
+      formData.append('description', values.description);
+      formData.append('price',values.price);
+      formData.append('capacity', values.capacity);
+      
+      formData.append('yearOfEstd', values.yearOfEstd);
+      formData.append('openHours', values.openHours);
+      formData.append('operatingDays', values.operatingDays);
+      formData.append('type', values.type);
+      formData.append('services',JSON.stringify(values.services))
+      formData.append('specialFeature',JSON.stringify(values.specialFeature))
+      formData.append('availability',JSON.stringify(values.availability))
+  
+      // Append file field (if there's a file to be uploaded)
+      if (values.billboard && values.billboard) {
+          formData.append('billboard', values.billboard);
+      }
+  
+      // Set up headers with JWT token
+      const token = localStorage.getItem('jwt_token');
+      const config = {
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+          },
+      };
+  
+      try {
+          // Send the POST request
+          const response = await axios.post('http://localhost:3000/api/banquet', formData, config);
+          console.log('Response:', response.data);
+          // Handle success (if needed)
+      } catch (error) {
+          console.error('Error:', error);
+          // Handle error (if needed)
+      }
+  }
+  
 
   const formik = useFormik({
     initialValues,
     validationSchema: getValidationSchema(currentStep),
-    onSubmit: (values,action) => {
-        console.log("entered")
-        console.log("Form Data Submitted: ", values); 
+    onSubmit:  (values, action) => {
+      console.log("values",values);
+      const response =  postBanquet(values)
+      // console.log("🚀 ~ onSubmit: ~ response:", response);
+
+      // console.log("Form Data Submitted: ", values);
       // After submission, navigate to another page or show a success message
       // router.push("/somepage");
     },
@@ -96,13 +131,13 @@ export default function Page({ params }: { params: { id: string } }) {
     const updatedFields = formik.values[fieldName].map((item: any, i: number) =>
       i === index ? value : item
     );
-  
+
     formik.setFieldValue(fieldName, updatedFields);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
-    console.log("File selected: ", file); 
+    console.log("File selected: ", file);
     formik.setFieldValue("billboard", file);
   };
   return (
@@ -115,8 +150,8 @@ export default function Page({ params }: { params: { id: string } }) {
         className="space-y-6 bg-gray-800 p-6 rounded-lg shadow-lg"
       >
         {/* //Step 1 */}
-        {(
-          <div  className={`${currentStep===1 ? "block" : "hidden"}`}>
+        {
+          <div className={`${currentStep === 1 ? "block" : "hidden"}`}>
             <h2 className={`text-xl font-semibold text-gray-200 mb-4 `}>
               Basic Information
             </h2>
@@ -147,7 +182,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Location - City:  <span className="text-red-500">*</span>
+                Location - City: <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -172,7 +207,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Location - Pincode:  <span className="text-red-500">*</span>
+                Location - Pincode: <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -198,7 +233,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Location - Area:  <span className="text-red-500">*</span>
+                Location - Area: <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -224,7 +259,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Description:  <span className="text-red-500">*</span>
+                Description: <span className="text-red-500">*</span>
               </label>
               <textarea
                 name="description"
@@ -247,7 +282,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Operating Days:  <span className="text-red-500">*</span>
+                Operating Days: <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -271,7 +306,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Open Hours:  <span className="text-red-500">*</span>
+                Open Hours: <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -295,7 +330,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Type:  <span className="text-red-500">*</span>
+                Type: <span className="text-red-500">*</span>
               </label>
               <select
                 name="type"
@@ -320,18 +355,17 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Cover Photo:  <span className="text-red-500">*</span>
+                Cover Photo: <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
                 name="billboard"
-                accept="image/*" 
+                accept="image/*"
                 onChange={handleFileChange}
                 onBlur={formik.handleBlur}
                 required
                 className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm `}
               />
-             
             </div>
             <div className="flex justify-between">
               <button
@@ -343,16 +377,20 @@ export default function Page({ params }: { params: { id: string } }) {
               </button>
             </div>
           </div>
-        )}
+        }
         {/* //step 2 */}
-        { (
-             <div  className={`${currentStep===2 ? "block" : "hidden"}`}>
-            <h2 className={`text-xl font-semibold text-gray-200 mb-4 ${currentStep===2 ? "block" : "hidden"}`}>
+        {
+          <div className={`${currentStep === 2 ? "block" : "hidden"}`}>
+            <h2
+              className={`text-xl font-semibold text-gray-200 mb-4 ${
+                currentStep === 2 ? "block" : "hidden"
+              }`}
+            >
               Services Provided
             </h2>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Price:  <span className="text-red-500">*</span>
+                Price: <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -376,7 +414,8 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                People Handling Capacity:  <span className="text-red-500">*</span>
+                People Handling Capacity:{" "}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -399,33 +438,10 @@ export default function Page({ params }: { params: { id: string } }) {
               )}
             </div>
 
+          
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Contact Us:  <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="contactUs"
-                placeholder="Mobile number"
-                value={formik.values.contactUs}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                required
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm ${
-                  formik.errors.contactUs && formik.touched.contactUs
-                    ? "border-[#b40e0e] bg-gray-700 text-white"
-                    : "border-gray-300 bg-gray-700 text-white"
-                }`}
-              />
-              {formik.errors.contactUs && formik.touched.contactUs && (
-                <p className="font-semibold text-[#b40e0e]">
-                  {formik.errors.contactUs}
-                </p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-200">
-                Year of Establishment:  <span className="text-red-500">*</span>
+                Year of Establishment: <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -465,16 +481,20 @@ export default function Page({ params }: { params: { id: string } }) {
               </button>
             </div>
           </div>
-        )}
+        }
         {/* //Step 3 */}
-        { (
-                 <div  className={`${currentStep===3 ? "block" : "hidden"}`}>
-            <h2 className={`text-xl font-semibold text-gray-200 mb-4 ${currentStep===3 ? "block" : "hidden"}`}>
+        {
+          <div className={`${currentStep === 3 ? "block" : "hidden"}`}>
+            <h2
+              className={`text-xl font-semibold text-gray-200 mb-4 ${
+                currentStep === 3 ? "block" : "hidden"
+              }`}
+            >
               Additional Details
             </h2>
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Services:  <span className="text-red-500">*</span>
+                Services: <span className="text-red-500">*</span>
               </label>
               {formik.values.services.map((service, index) => (
                 <div key={index} className="flex items-center mb-2">
@@ -555,7 +575,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-200">
-                Function Availability:  <span className="text-red-500">*</span>
+                Function Availability: <span className="text-red-500">*</span>
               </label>
               {formik.values.availability.map((avail, index) => (
                 <div key={index} className="flex items-center mb-2">
@@ -603,8 +623,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 </button>
                 <button
                   type="submit"
-                //   onClick={()=>console.log(formik.values)}
-                  
+                  //   onClick={()=>console.log(formik.values)}
+
                   className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Submit
@@ -612,7 +632,7 @@ export default function Page({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-        )}
+        }
       </form>
     </div>
   );

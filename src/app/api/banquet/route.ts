@@ -15,7 +15,9 @@ export async function GET(){
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
+    
     const updatedData = await banquetMiddleware(req)
+
     const banquet = await handlePost(Banquet, updatedData, "banquet");
     return banquet
   }

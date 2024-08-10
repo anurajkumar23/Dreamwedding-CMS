@@ -44,7 +44,7 @@ const BanquetSchema = new Schema({
       required: [true, 'Location area is required'],
     },
   },
-  locationUrl: {type:String , required:[true,"location Url is required"]},
+  locationUrl: {type:String },
   description:{type:String , required:[true,"Description is required"]},
   price:{type:Number , required:[true,"Price is required"]},
   like: [
@@ -55,7 +55,6 @@ const BanquetSchema = new Schema({
   ],
   capacity:{type:Number , required:[true,"total people Handling Capacity is required"]},
   specialFeature: [String],
-  contactUs: {type:Number , required:[true,"Contact is required"]},
   yearOfEstd:  {type:Number , required:[true,"year Of Estd. is required"]},
   services: {
     type: [String],
@@ -92,11 +91,7 @@ const BanquetSchema = new Schema({
   },
   operatingDays: {type:String , required:[true,"operatingDays is required" ], uppercase:true},
   gallery: [{
-    name: {
-      type: String,
-      required: true,
-      default:"photos"
-    },
+    name: String,
     photos: [String],
   }],
   // createdAt: { type: Date, default: Date.now },
