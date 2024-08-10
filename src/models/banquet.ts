@@ -67,6 +67,7 @@ const BanquetSchema = new Schema({
     },
     photos: [String],
   }],
+  // createdAt: { type: Date, default: Date.now },
 });
 
 const Banquet = models.Banquet || model("Banquet", BanquetSchema);

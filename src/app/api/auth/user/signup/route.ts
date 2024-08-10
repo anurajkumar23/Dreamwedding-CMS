@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import signToken from '@/app/middleware/auth/token';
 import User from '@/models/user';
 import cookie from 'cookie';
+import { connectToDB } from '@/utils/database';
 
+
+
+connectToDB();
 export function setCookie(token: string) {
   const cookieOptions = {
     expires: new Date(

@@ -20,9 +20,8 @@ const LeftSideBar: React.FC = () => {
   };
 
   return (
-    <div className="h-screen left-0 top-0 sticky p-10 flex flex-col gap-16 bg-blue-2 shadow-xl max-lg:hidden">
+    <div className="z-10 h-screen left-0 top-0 sticky p-10 flex flex-col gap-16 bg-[#E9F5FE] shadow-xl max-lg:hidden">
       <Image src={logo} alt="logo" width={200} height={70} priority={false} loading="lazy"/>
-
       <div className="flex flex-col gap-12">
         {navLinks.map((link: NavLink) => (
           <div key={link.label}>
@@ -31,8 +30,8 @@ const LeftSideBar: React.FC = () => {
                 <a
                   href={link.url}
                   onClick={handleCategoryClick}
-                  className={`flex gap-4 text-body-medium ${
-                    categoryOpen ? "text-red-600" : "text-grey-1"
+                  className={`flex gap-4  ${
+                    categoryOpen ? "text-red-600" : "text-[#616161]"
                   }`}
                 >
                   {link.icon} <p>{link.label}</p>
@@ -43,8 +42,8 @@ const LeftSideBar: React.FC = () => {
                       <Link
                         href={innerLink.url}
                         key={innerLink.label}
-                        className={`flex gap-4 text-body-medium ${
-                          pathname === innerLink.url ? "text-red-600" : "text-grey-1"
+                        className={`flex gap-4  ${
+                          pathname === innerLink.url ? "text-red-600" : "text-[#616161]"
                         }`}
                       >
                         {innerLink.icon} <p>{innerLink.label}</p>
@@ -56,8 +55,8 @@ const LeftSideBar: React.FC = () => {
             ) : (
               <Link
                 href={link.url}
-                className={`flex gap-4 text-body-medium ${
-                  pathname === link.url ? "text-red-600" : "text-grey-1"
+                className={`flex gap-4  ${
+                  pathname === link.url ? "text-red-600" : "text-[#616161]"
                 }`}
               >
                 {link.icon} <p>{link.label}</p>
@@ -67,7 +66,7 @@ const LeftSideBar: React.FC = () => {
         ))}
       </div>
 
-      <div className="flex gap-4 text-body-medium items-center">
+      <div className="flex gap-4  items-center">
         <p>Edit Profile</p>
       </div>
     </div>

@@ -15,8 +15,9 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const updatedData = await req.json();
   const { id } = params;
-  const user = await handlePatch(User, req, id, "user","restricted", ["role"]);
+  const user = await handlePatch(User, id, "user",updatedData);
   return user;
 }
 
