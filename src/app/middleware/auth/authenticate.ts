@@ -24,8 +24,9 @@ export async function isLoggedIn(req: NextRequest) {
 
     // Check if user exists
     console.log(decoded.id, "❤❤❤❤❤");
+   
     const currentUser = await User.findById(decoded.id);
-    console.log(currentUser, "🤩🤩🤩🤩🤩🤩");
+    // console.log(currentUser, "🤩🤩🤩🤩🤩🤩");
 
     if (!currentUser) {
       return { status: 401, message: 'User not found', isAuthorized: false };

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     const newUser = await User.create({ email, phone, password, name, googleLogIn: false });
 
-    const token = signToken(newUser._id);
+    const token = signToken(newUser._id, newUser.role);
 
     const cookieHeader = setCookie(token);
     const responseHeaders = setResponseHeaders(token);
