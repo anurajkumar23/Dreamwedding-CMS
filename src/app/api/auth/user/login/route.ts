@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Incorrect email or password' }, { status: 401 });
     }
 
-    const token = signToken(user._id);
+    const token = signToken(user._id, user.role);
 
     const cookieHeader = setCookie(token);
     const responseHeaders = setResponseHeaders(token);

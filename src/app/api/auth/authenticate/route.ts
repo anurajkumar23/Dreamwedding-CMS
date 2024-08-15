@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const user: { isAuthorized: boolean; message: any; status: number } =
   await isLoggedIn(req);
   
-  console.log(user,"😊😊😊😊😊😊😊");
+
   if (!user.isAuthorized) {
     return NextResponse.json(
       { message: user.message, isAuthorized: user.isAuthorized },
