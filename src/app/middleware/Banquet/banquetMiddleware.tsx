@@ -25,7 +25,7 @@ export default async function banquetMiddleware(req: Request) {
   // console.log(Data, "ishu");
   // console.log(filename, "filename");
 
-  console.log(Data,"Data ❤❤❤❤❤")
+  // console.log(Data,"Data ❤❤❤❤❤")
   const location = JSON.parse(Data.location)
   const services = JSON.parse(Data.services)
   const specialFeature = JSON.parse(Data.specialFeature)
@@ -36,7 +36,7 @@ export default async function banquetMiddleware(req: Request) {
 
   if (file) {
     updatedData = { ...Data, billboard: filename ,location,services,specialFeature,availability};
-    console.log(updatedData," updatedData ❤❤❤❤❤")
+    // console.log(updatedData," updatedData ❤❤❤❤❤")
   } else {
     updatedData = Data;
   }

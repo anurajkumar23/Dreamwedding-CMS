@@ -18,3 +18,26 @@ export interface postBanquet{
     operatingDays: string;
     type: string;
 }
+
+export interface BanquetDocument {
+  _id: string;
+  name: string;
+  rating: number;
+  location: {
+    city: string;
+    pincode: string;
+    area: string;
+  } | null; // Allow location to be null
+  description: string;
+  price: number;
+  capacity: number;
+  type: string;
+  yearOfEstd: number;
+  // Add other fields that you want to display
+  contactUs: number;
+  specialFeature: string[];
+  availability: string[];
+  operatingDays: string;
+  openHours: string;
+  createdAt: Date;
+}
