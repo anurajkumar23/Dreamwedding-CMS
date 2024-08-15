@@ -3,8 +3,9 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import Image from 'next/image';
 import { postBanquet as FormValues } from "@/interfaces/banquet";
+import toast from "react-hot-toast";
 
-const InfoUpdate = ({ banquet }:{banquet:FormValues}) => {
+const InfoUpdate = ({ banquet,id }:{banquet:FormValues,id:string}) => {
   const [currentStep, setCurrentStep] = useState(1);
 
   // Refs to store form field values
@@ -66,12 +67,16 @@ const InfoUpdate = ({ banquet }:{banquet:FormValues}) => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/banquet",
+      
+      const response = await axios.patch(
+        `http://localhost:3000/api/banquet/${id}`,
         formData,
         config
       );
-      console.log("Response:", response.data);
+      console.log("🤩🤩🤩🤩🤩🤩🤩", response.status);
+      if(response.status===200){
+        toast.success("Updated Successfully")
+      }
       // Handle success (if needed)
     } catch (error) {
       console.error("Error:", error);
