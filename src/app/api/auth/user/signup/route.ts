@@ -8,7 +8,7 @@ import { connectToDB } from '@/utils/database';
 connectToDB();
 
 // Helper function to set the JWT cookie
-const setCookie = (token: string): string => {
+export const setCookie = (token: string): string => {
   const cookieOptions = {
     expires: new Date(
       Date.now() + Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000
@@ -22,7 +22,7 @@ const setCookie = (token: string): string => {
 };
 
 // Helper function to set the authorization header
-const setResponseHeaders = (token: string): { Authorization: string } => {
+export const setResponseHeaders = (token: string): { Authorization: string } => {
   return {
     Authorization: `Bearer ${token}`,
   };
