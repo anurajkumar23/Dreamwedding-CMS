@@ -24,6 +24,7 @@
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
     "formik": "^2.4.6",
+    "jose": "^5.6.3",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.394.0",
     "micro-cors": "^0.1.1",
