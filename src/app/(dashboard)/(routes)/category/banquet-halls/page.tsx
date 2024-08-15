@@ -3,30 +3,10 @@ import { connectToDB } from "@/utils/database";
 import Banquet from "@/models/banquet";
 import { BanquetColumn } from "./components/columns";
 import { BanquetClient } from "./components/client";
+import { BanquetDocument } from "@/interfaces/banquet";
 
 // Define the interface for the Banquet document
-interface BanquetDocument {
-  _id: string;
-  name: string;
-  rating: number;
-  location: {
-    city: string;
-    pincode: string;
-    area: string;
-  } | null; // Allow location to be null
-  description: string;
-  price: number;
-  capacity: number;
-  type: string;
-  yearOfEstd: number;
-  // Add other fields that you want to display
-  contactUs: number;
-  specialFeature: string[];
-  availability: string[];
-  operatingDays: string;
-  openHours: string;
-  createdAt: Date;
-}
+
 
 const BanquetPage = async () => {
   await connectToDB();

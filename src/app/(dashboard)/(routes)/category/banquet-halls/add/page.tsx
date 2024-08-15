@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useFormik } from "formik";
 import { getValidationSchema } from "./components/formvalidate";
 // import { AddbanquetSchema } from "./components/formvalidate";
-import { postBanquet as FormValues } from "../../../../../../interfaces/banquet";
+import { postBanquet as FormValues } from "@/interfaces/banquet";
 import axios from "axios";
 import { connectToDB } from "@/utils/database";
 connectToDB()
@@ -36,7 +36,7 @@ const initialValues: FormValues = {
 export default function Page() {
   
   const searchParams = useSearchParams();
-  const query = searchParams.get("query");
+
 
 
   const [currentStep, setCurrentStep] = useState(1);
