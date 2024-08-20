@@ -11,7 +11,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  
+  const updatedData = await req.json();
   const user = await handlePost(User,updatedData,"user");
   return user
 }

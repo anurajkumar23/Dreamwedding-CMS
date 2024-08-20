@@ -2,6 +2,85 @@ import { Schema, model, models } from "mongoose";
 import argon2 from 'argon2';
 import crypto from 'crypto';
 
+const bankSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  account: {
+    type: String,
+    required: true,
+  },
+  reenterAccount: {
+    type: String,
+    required: true,
+  },
+  ifsc: {
+    type: String,
+    required: true,
+  },
+  holdername: {
+    type: String,
+    required: true,
+  },
+});
+
+const personalInfoSchema = new Schema({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  middleName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  whatsappNumber: {
+    type: String,
+  },
+  pincode: Number,
+  city: String,
+  state: String,
+});
+
+const importantInfoSchema = new Schema({
+
+  GSTNO: {
+    type: String,
+    required:true
+  },
+  bank: {
+    type: bankSchema,
+    required: true,
+  },
+});
+
+const governmentInfoSchema = new Schema({
+  pancard: {
+    type: String,
+    required: true,
+  },
+ 
+  document: {
+    type: String, 
+    required: true,
+  },
+});
+
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -24,6 +103,20 @@ const UserSchema = new Schema({
   state: String,
   name: {
     type: String,
+  },
+  draft:{
+    personalInfo: {
+      type: personalInfoSchema,
+      required: true,
+    },
+    importantInfo: {
+      type: importantInfoSchema,
+      required: true,
+    },
+    governmentInfo: {
+      type: governmentInfoSchema,
+      required: true,
+    },
   },
   googleLogIn: {
     type: Boolean,
