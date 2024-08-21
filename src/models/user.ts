@@ -1,6 +1,7 @@
 import { Schema, model, models } from "mongoose";
 import argon2 from 'argon2';
 import crypto from 'crypto';
+import { boolean } from "yup";
 
 const bankSchema = new Schema({
   name: {
@@ -88,6 +89,7 @@ const UserSchema = new Schema({
     required: [true, "Email is required!"],
     match: [/.+\@.+\..+/, "Please use a valid email address"],
   },
+  
   password: {
     type: String,
     required: [true, "Please provide a password"],
@@ -104,7 +106,13 @@ const UserSchema = new Schema({
   name: {
     type: String,
   },
+  sellerRequest: {
+    type: String,
+    enum: ['none', 'pending', 'accepted'],
+    default: 'none',
+  },
   draft:{
+   
     personalInfo: {
       type: personalInfoSchema,
       required: true,

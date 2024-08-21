@@ -33,7 +33,7 @@ const SellerSchema = new Schema({
 
   userid:{
     type:Schema.Types.ObjectId,
-    red:User,
+    ref:User,
     required:true,
     unique:true
   },
