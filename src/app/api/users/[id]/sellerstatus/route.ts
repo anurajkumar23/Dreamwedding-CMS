@@ -78,6 +78,8 @@ export async function GET(
 
     const seller = await Seller.create(data)
     console.log(seller,"seller")
+    user.sellerRequest="pending"
+    await user.save()
     return NextResponse.json({message:"success",data:seller}, { status: 200 });
   } catch (error) {
     console.error("Error sending request", error);
