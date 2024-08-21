@@ -4,7 +4,7 @@ import {
   LayoutDashboard,
   Shapes,
   ShoppingBag,
-  UsersRound,
+  Users,
   Building,
   SprayCan,
   Utensils,
@@ -30,7 +30,7 @@ export const navLinks: NavLink[] = [
       },
       {
         url: "/category/decorators",
-        icon: <SprayCan /> ,
+        icon: <SprayCan />,
         label: "Decorators",
       },
       {
@@ -46,13 +46,35 @@ export const navLinks: NavLink[] = [
     ],
   },
   {
+    url: "/sellerRequest",
+    icon: <Shapes />,  // Consider changing this icon to distinguish it from "Category"
+    label: "Seller Request",
+    innerLinks: [
+      {
+        url: "/sellerRequest/pending",
+        icon: <Building />, // Consider using a different icon here
+        label: "Pending",
+      },
+      {
+        url: "/sellerRequest/accepted",
+        icon: <SprayCan />,
+        label: "Accepted",
+      },
+      {
+        url: "/sellerRequest/rejected",
+        icon: <Utensils />,
+        label: "Rejected",
+      },
+    ],
+  },
+  {
     url: "/orders",
     icon: <ShoppingBag />,
     label: "Orders",
   },
   {
     url: "/users",
-    icon: <UsersRound />,
+    icon: <Users />,
     label: "Users",
   },
 ];

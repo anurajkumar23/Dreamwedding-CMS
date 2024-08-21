@@ -13,10 +13,16 @@ import { NavLink } from "@/lib/types";
 const LeftSideBar: React.FC = () => {
   const pathname = usePathname();
   const [categoryOpen, setCategoryOpen] = useState(false);
+  const [sellerRequestOpen, setSellerRequestOpen] = useState(false);
 
   const handleCategoryClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the default link behavior
     setCategoryOpen(!categoryOpen);
+  };
+
+  const handleSellerRequestClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent the default link behavior
+    setSellerRequestOpen(!sellerRequestOpen);
   };
 
   return (
@@ -52,6 +58,33 @@ const LeftSideBar: React.FC = () => {
                   </div>
                 )}
               </>
+            ) : link.label === "Seller Request" ? (
+              <>
+                <a
+                  href={link.url}
+                  onClick={handleSellerRequestClick}
+                  className={`flex gap-4  ${
+                    sellerRequestOpen ? "text-red-600" : "text-[#616161]"
+                  }`}
+                >
+                  {link.icon} <p>{link.label}</p>
+                </a>
+                {sellerRequestOpen && (
+                  <div className="flex flex-col pl-8 gap-4 mt-2">
+                    {link.innerLinks?.map((innerLink) => (
+                      <Link
+                        href={innerLink.url}
+                        key={innerLink.label}
+                        className={`flex gap-4  ${
+                          pathname === innerLink.url ? "text-red-600" : "text-[#616161]"
+                        }`}
+                      >
+                        {innerLink.icon} <p>{innerLink.label}</p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <Link
                 href={link.url}
@@ -66,7 +99,7 @@ const LeftSideBar: React.FC = () => {
         ))}
       </div>
 
-      <div className="flex gap-4  items-center">
+      <div className="flex gap-4 items-center">
         <p>Edit Profile</p>
       </div>
     </div>
