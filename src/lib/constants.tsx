@@ -9,6 +9,7 @@ import {
   SprayCan,
   Utensils,
   Camera,
+  ScanFace,
 } from "lucide-react";
 import { NavLink } from "./types";
 
@@ -44,6 +45,11 @@ export const navLinks: NavLink[] = [
         label: "Photographers",
       },
     ],
+  },
+  {
+    url: "/seller",
+    icon: <ScanFace />,
+    label: "Seller",
   },
   {
     url: "/sellerRequest",
