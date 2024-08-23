@@ -1,4 +1,3 @@
-// components/UserLayout.tsx
 import LeftSideBar from '@/components/layout/LeftSideBar';
 import TopBar from '@/components/layout/TopBar';
 import React, { ReactNode } from 'react';
@@ -9,11 +8,11 @@ interface DashboardLayout {
 
 const UserLayout: React.FC<DashboardLayout> = ({ children }) => {
   return (
-    <div className='flex max-lg:flex-col '>
+    <div className='flex flex-col lg:flex-row h-auto min-h-screen'>
       <LeftSideBar />
-      <TopBar/>
-      <div className='flex-1'>
-        {children}
+      <div className='flex-1 lg:ml-[250px]'>
+        <TopBar />
+        <main className='p-4 lg:p-8'>{children}</main>
       </div>
     </div>
   );
