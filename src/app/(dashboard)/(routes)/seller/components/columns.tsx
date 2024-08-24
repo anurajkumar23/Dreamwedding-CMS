@@ -2,6 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
+import { CheckCircle, XCircle, Hourglass } from "lucide-react";
+
 
 export type SellerColumn = {
   id: string;
@@ -57,6 +59,36 @@ export const columns: ColumnDef<SellerColumn>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.original.status;
+      let statusColor;
+      let StatusIcon;
+  
+      switch (status) {
+        case "Pending":
+          statusColor = "text-yellow-500";
+          StatusIcon = Hourglass;
+          break;
+        case "Accepted":
+          statusColor = "text-green-500";
+          StatusIcon = CheckCircle;
+          break;
+        case "Rejected":
+          statusColor = "text-red-500";
+          StatusIcon = XCircle;
+          break;
+        default:
+          statusColor = "text-gray-500";
+          StatusIcon = Hourglass;
+      }
+  
+      return (
+        <span className={`flex items-center gap-2 ${statusColor}`}>
+          <StatusIcon className="w-5 h-5" />
+          {status}
+        </span>
+      );
+    },
   },
   // {
   //   accessorKey: "banquets",
