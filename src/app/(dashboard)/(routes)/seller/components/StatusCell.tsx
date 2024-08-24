@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import axios from "axios";
 import { CheckCircle, XCircle, Hourglass } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -20,22 +21,11 @@ export const StatusCell: React.FC<StatusCellProps> = ({ initialStatus, sellerId 
   const [loading, setLoading] = useState(false);
 
   const handleStatusChange = async (newStatus: "Pending" | "Accepted" | "Rejected") => {
-    setStatus(newStatus);
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/seller/${sellerId}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update status.");
-      }
-
+      await axios.patch(`/api/users/${sellerId}`, { role: newStatus });
+      setStatus(newStatus);
       toast.success("Status updated successfully.");
     } catch (error) {
       toast.error("Error updating status.");
@@ -80,6 +70,7 @@ export const StatusCell: React.FC<StatusCellProps> = ({ initialStatus, sellerId 
           </option>
         ))}
       </select>
+      {loading && <div className="loader"></div>} {/* Show a loader when status is being updated */}
     </div>
   );
 };
