@@ -1,16 +1,17 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-
-import { CellAction } from "./cell-action"
+import { ColumnDef } from "@tanstack/react-table";
+import { CellAction } from "./cell-action";
+import StatusCell from "./StatusCell";
 
 export type UserColumn = {
-  id: string
-  name: string
-  phone:     String
-  email:     String
-  address:   String
-}
+  id: string;
+  name: string;
+  phone: string;
+  role: string;
+  email: string;
+  address: string;
+};
 
 export const columns: ColumnDef<UserColumn>[] = [
   {
@@ -19,11 +20,11 @@ export const columns: ColumnDef<UserColumn>[] = [
   },
   {
     accessorKey: "phone",
-    header: "Phone no",
+    header: "Phone No",
   },
   {
     accessorKey: "email",
-    header: "Email id",
+    header: "Email ID",
   },
   {
     accessorKey: "address",
@@ -32,6 +33,14 @@ export const columns: ColumnDef<UserColumn>[] = [
   {
     accessorKey: "role",
     header: "Role",
+    cell: ({ row }) => (
+      <div className="flex justify-center items-center">
+        <StatusCell
+          role={row.original.role}
+          userId={row.original.id}
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "createdAt",
@@ -39,6 +48,6 @@ export const columns: ColumnDef<UserColumn>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} />
+    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
