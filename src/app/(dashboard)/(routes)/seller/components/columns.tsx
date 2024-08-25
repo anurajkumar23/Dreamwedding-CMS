@@ -2,6 +2,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import StatusCell from "./StatusCell";
+import { ArrowUpDown } from "lucide-react"
+import { Button } from "@/components/ui/button";
 
 export type SellerColumn = {
   id: string;
@@ -56,7 +58,17 @@ export const columns: ColumnDef<SellerColumn>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) =>{
+      return (
+        <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4"/>
+        </Button>
+      )
+    },
     cell: ({ row }) => (
       <StatusCell
         initialStatus={row.original.status}
