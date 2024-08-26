@@ -22,8 +22,10 @@ import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Image from "next/image";
 
-// Validation schema using zod
+
+
 const formSchema = z.object({
     firstName: z.string().min(2, "First name is required"),
     middleName: z.string().optional(),
@@ -31,7 +33,7 @@ const formSchema = z.object({
     phoneNumber: z.string().min(10, "Phone number is required"),
     email: z.string().email("Invalid email"),
     address: z.string().min(5, "Address is required"),
-    pincode: z.string().min(6, "Pincode is required"),
+    pincode: z.number().min(6, "Pincode is required"),
     city: z.string().min(2, "City is required"),
     state: z.string().min(2, "State is required"),
     whatsappNumber: z.string().optional(),
@@ -50,7 +52,7 @@ const formSchema = z.object({
 type SellerFormValues = z.infer<typeof formSchema>;
 
 interface SellerFormProps {
-    initialData: any; // Replace 'any' with a more specific type if you have it
+    initialData: any;
 }
 
 const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
@@ -79,7 +81,7 @@ const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
             GSTNO: "",
             pancard: "",
             document: "",
-            status: "Pending",
+            status: "",
             bank: {
                 name: "",
                 account: "",
@@ -93,9 +95,9 @@ const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
         try {
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/sellers/${initialData._id}`, data);
+                await axios.patch(`/api/seller/${initialData._id}`, data);
             } else {
-                await axios.post(`/api/sellers`, data);
+                await axios.post(`/api/seller`, data);
             }
             router.refresh();
             router.push(`/sellers`);
@@ -110,7 +112,7 @@ const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/api/sellers/${initialData._id}`);
+            await axios.delete(`/api/seller/${initialData._id}`);
             router.refresh();
             router.push(`/sellers`);
             toast.success("Seller deleted.");
@@ -126,7 +128,7 @@ const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
         <>
             <AlertModal isOpen={open} onClose={() => setOpen(false)} onConfirm={onDelete} loading={loading} />
             <div className="text-white flex items-center justify-between">
-                <Heading  title={title} description={description} />
+                <Heading title={title} description={description} />
                 {initialData && (
                     <Button
                         disabled={loading}
@@ -142,7 +144,7 @@ const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <div className="md:grid-cols-10 grid gap-4 container">
-                        <div className="text-[#b7bac1] md:col-span-4 w-full h-[300px] relative rounded-lg overflow-hidden mb-5">
+                        <div className="text-[#b7bac1] md:col-span-4 w-full h-auto relative rounded-lg overflow-hidden mb-5">
                             <FormField
                                 control={form.control}
                                 name="document"
@@ -150,12 +152,57 @@ const SellerForm: React.FC<SellerFormProps> = ({ initialData }) => {
                                     <FormItem>
                                         <FormLabel>Document</FormLabel>
                                         <FormControl>
-                                            <Input disabled={loading} placeholder="Document" {...field} />
+                                            {field.value ? (
+                                                <>
+                                                    {field.value.endsWith('.pdf') ? (
+                                                        <div className="flex flex-col items-center">
+                                                            {/* PDF Preview */}
+                                                            <iframe
+                                                                src={`/images/seller/${field.value}`}
+                                                                className="w-full h-64 sm:h-80 md:h-96 lg:h-[400px] rounded-lg border mb-2"
+                                                                title="PDF Preview"
+                                                            />
+                                                            <a
+                                                                href={`/images/seller/${field.value}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-blue-500 underline mt-2"
+                                                            >
+                                                                View Full PDF
+                                                            </a>
+                                                        </div>
+
+                                                    ) : (
+                                                        <div className="flex flex-col items-center">
+                                                            {/* Image Preview */}
+                                                            <Image
+                                                                src={`/images/seller/${field.value}`}
+                                                                alt="Document"
+                                                                width={300}
+                                                                height={300}
+                                                                className="rounded-lg object-contain mb-2"
+                                                            />
+                                                            <a
+                                                                href={`/images/seller/${field.value}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-blue-500 underline mt-2"
+                                                            >
+                                                                View Full Image
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <Input disabled={loading} placeholder="Document" {...field} />
+                                            )}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+
+
                         </div>
                         <div className="md:grid md:col-span-6 container flex-1 bg-slate-800 p-5 rounded-lg font-bold text-[#b7bac1] h-max gap-8">
                             <FormField
