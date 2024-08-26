@@ -12,7 +12,7 @@ const UserLayout: React.FC<DashboardLayout> = ({ children }) => {
       <LeftSideBar />
       <div className='flex-1 lg:ml-[250px]'>
         <TopBar />
-        <main className='p-4 lg:p-8'>{children}</main>
+        <main className=''>{children}</main>
       </div>
     </div>
   );

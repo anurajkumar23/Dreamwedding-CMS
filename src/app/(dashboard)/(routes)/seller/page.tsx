@@ -31,7 +31,7 @@ const SellerPage = async () => {
   }));
 
   return (
-    <div className="w-full max-w-screen-xl mx-auto">
+    <div className="max-w-screen-xl">
       <div className="flex-1 space-y-4 p-8 pt-6 text-white">
         <SellerClient data={formattedSellers} />
       </div>

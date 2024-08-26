@@ -24,8 +24,10 @@ export const StatusCell: React.FC<StatusCellProps> = ({ initialStatus, sellerId 
     setLoading(true);
 
     try {
-      await axios.patch(`/api/users/${sellerId}`, { role: newStatus });
-      setStatus(newStatus);
+      const seller = await axios.patch(`/api/seller/${sellerId}/status?status=${newStatus}`)
+     
+    
+      console.log(seller,"seller")
       toast.success("Status updated successfully.");
     } catch (error) {
       toast.error("Error updating status.");
