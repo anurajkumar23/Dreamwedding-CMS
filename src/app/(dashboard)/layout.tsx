@@ -8,7 +8,7 @@ interface DashboardLayout {
 
 const UserLayout: React.FC<DashboardLayout> = ({ children }) => {
   return (
-    <div className='flex flex-col lg:flex-row h-auto min-h-screen'>
+    <div className='flex flex-col  h-auto min-h-screen'>
       <LeftSideBar />
       <div className='flex-1 lg:ml-[250px]'>
         <TopBar />

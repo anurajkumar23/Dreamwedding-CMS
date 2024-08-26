@@ -10,7 +10,7 @@ import { SellerInterface } from "@/interfaces/seller";
 const SellerPage = async () => {
   await connectToDB();
 
-  const sellers: SellerInterface[] = await Seller.find({ status: "Pending" }).lean();
+  const sellers: SellerInterface[] = await Seller.find().lean();
 
   const formattedSellers: SellerColumn[] = sellers.map((seller) => ({
     id: seller._id.toString(),
@@ -20,13 +20,13 @@ const SellerPage = async () => {
     address: `${seller.city}, ${seller.state}, ${seller.pincode}`,
     whatsappNumber: seller.whatsappNumber,
     GSTNO: seller.GSTNO,
-    bankDetails: `${seller.bank.name}, A/C: ${seller.bank.account}, IFSC: ${seller.bank.ifsc}`,
+    bankDetails: seller.bank ? `${seller.bank.name || 'N/A'}, A/C: ${seller.bank.account || 'N/A'}, IFSC: ${seller.bank.ifsc || 'N/A'}` : 'N/A',
     pancard: seller.pancard,
     status: seller.status,
-    banquets: seller.Banquets.join(", "),
-    photographers: seller.Photographers.join(", "),
-    decorators: seller.Decorators.join(", "),
-    caterers: seller.Caterers.join(", "),
+    banquets: seller.Banquets?.join(", ") || 'N/A',
+    photographers: seller.Photographers?.join(", ") || 'N/A',
+    decorators: seller.Decorators?.join(", ") || 'N/A',
+    caterers: seller.Caterers?.join(", ") || 'N/A',
     createdAt: seller.createdAt ? seller.createdAt.toISOString().split('T')[0] : "N/A",
   }));
 
