@@ -6,15 +6,11 @@ import CatererForm from './CatererForm'
 export default async function CatererPage({params}:{params: {id: string}}) {
   await connectToDB()
 
+let caterer = null
 
-
-  const caterer = await Caterer.findById(params.id).lean();
-
-  // if (caterer && caterer._id) {
-  //   caterer._id = caterer._id.toString();
-  // }
-
-
+if(params.id != 'new'){
+  caterer = await Caterer.findById(params.id).lean();
+}
   return (
     <div className="text-white">
       <CatererForm initialData = {caterer} />
