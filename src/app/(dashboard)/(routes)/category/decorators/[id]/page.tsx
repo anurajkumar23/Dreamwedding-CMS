@@ -13,7 +13,7 @@ export default async function page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="text-white">
+    <div >
       <DecoratorForm initialData={decorator} />
     </div>
   );

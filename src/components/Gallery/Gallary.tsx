@@ -31,8 +31,12 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
       <section id="photos">
         <div className="columns-2 gap-1 sm:columns-3">
           {photos.map((imageUrl, idx) => {
-            const photoUrl = `/images/${category}/media/${imageUrl}`;
-            console.log("Rendering image:", photoUrl); // Log the image URL for debugging
+            // Detect if the image URL is a blob (local file) or a server-hosted image
+            const isBlobUrl = imageUrl.startsWith("blob:");
+            const photoUrl = isBlobUrl
+              ? imageUrl
+              : `/images/${category}/media/${imageUrl}`;
+            console.log("Rendering image:", photoUrl);
 
             return (
               <div key={idx} className="relative mb-4">
@@ -47,7 +51,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
                 />
                 <button
                   className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full"
-                  onClick={() => removeImage(idx)} // Remove the image
+                  onClick={() => removeImage(idx)}
                 >
                   <X size={20} />
                 </button>
@@ -60,7 +64,11 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
           <div className="relative w-full h-full">
             <Image
-              src={`/images/${category}/media/${photos[currentImage]}`}
+              src={
+                photos[currentImage]?.startsWith("blob:")
+                  ? photos[currentImage]
+                  : `/images/${category}/media/${photos[currentImage]}`
+              }
               alt={`Photo ${currentImage}`}
               layout="fill"
               objectFit="contain"
