@@ -127,7 +127,7 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                     </Button>
                 )}
             </div>
-            <Separator className="mb-4 my-4"/>
+            <Separator className="mb-4 my-4" />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <div className="md:grid-cols-10 grid gap-4 container">
@@ -135,41 +135,29 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                             <FormField
                                 control={form.control}
                                 name="photos"
-                                render={({ field }) => (
+                                render={({ field: { value, onChange, } }) => (
                                     <FormItem>
                                         <FormLabel>Photos</FormLabel>
                                         <FormControl>
-                                            {field.value && Array.isArray(field.value) ? (
+                                            {value && Array.isArray(value) && value.length > 0 ? (
                                                 <>
                                                     <GalleryImage
-                                                        photos={field.value}
+                                                        photos={value}
                                                         category="decorator"
-                                                        onChange={(newPhotos) => field.onChange(newPhotos)}
+                                                        onChange={(newPhotos) => onChange(newPhotos)}
                                                     />
                                                     <Dropzone
                                                         onDrop={(files) => {
                                                             const newImages = Array.from(files).map((file) =>
                                                                 URL.createObjectURL(file)
                                                             );
-                                                            const updatedPhotos = [...(field.value || []), ...newImages];
-                                                            field.onChange(updatedPhotos);
+                                                            onChange([...(value || []), ...newImages]);
                                                         }}
-                                                        onClick={() => document.getElementById("addImageInput").click()}
-                                                    />
-                                                    <Input
-                                                        id="addImageInput"
-                                                        type="file"
-                                                        accept="image/*"
-                                                        className="hidden"
-                                                        multiple
-                                                        onChange={(e) => {
-                                                            if (e.target.files) {
-                                                                const newImages = Array.from(e.target.files).map((file) =>
-                                                                    URL.createObjectURL(file)
-                                                                );
-                                                                const updatedPhotos = [...(field.value || []), ...newImages];
-                                                                field.onChange(updatedPhotos);
-                                                            }
+                                                        onChange={(files) => {
+                                                            const newImages = Array.from(files).map((file) =>
+                                                                URL.createObjectURL(file)
+                                                            );
+                                                            onChange([...(value || []), ...newImages]);
                                                         }}
                                                     />
                                                 </>
@@ -179,9 +167,14 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                                                         const newImages = Array.from(files).map((file) =>
                                                             URL.createObjectURL(file)
                                                         );
-                                                        field.onChange(newImages);
+                                                        onChange(newImages);
                                                     }}
-                                                    onClick={() => document.getElementById("addImageInput").click()}
+                                                    onChange={(files) => {
+                                                        const newImages = Array.from(files).map((file) =>
+                                                            URL.createObjectURL(file)
+                                                        );
+                                                        onChange(newImages);
+                                                    }}
                                                 />
                                             )}
                                         </FormControl>
