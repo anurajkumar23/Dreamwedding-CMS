@@ -1,34 +1,30 @@
 import { filter } from "@/utils/filterMiddleware";
 import upload from "@/utils/upload";
 
+export async function JsonFilter(data, actionType, fieldsToRemove) {
+  if (actionType === "restricted") {
+    fieldsToRemove.forEach((field) => {
+      if (field in data) {
+        delete data[field]; // Remove the field from data
+      }
+    });
+  }
+  return data;
+}
+
 export default async function decoratorMiddleware(req: Request) {
-  console.log(req.headers)
-  const data = await req.formData();
- 
+  console.log(req.headers);
 
-  const file = data.get("billboard");
+  // Parsing the request body to JSON format
+  let data = await req.json();
 
-  
-
-  const filename = await upload(file, "decorator");
-
-  const Data = await filter(data, "restricted", [
+  // Removing specified fields if they exist
+  const filteredData = await JsonFilter(data, "restricted", [
     "rating",
     "like",
     "contactUs",
     "reviews",
   ]);
 
-  // console.log(Data, "ishu");
-  // console.log(filename, "filename");
-
-  let updatedData;
-
-  if (file) {
-    updatedData = { ...Data, billboard: filename };
-  } else {
-    updatedData = Data;
-  }
-  // console.log(updatedData, "updatedData");
-  return updatedData;
+  return filteredData;
 }

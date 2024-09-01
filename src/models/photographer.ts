@@ -18,6 +18,12 @@ const PhotographerSchema = new Schema({
     min: 1,
     max: 5,
   },
+  adminRating:{
+    type: Number,
+    select: false,
+    min: 1,
+    max: 5
+},
   location: { city: String, pincode: String, area: String },
   locationUrl: String,
   outerdescription: String,

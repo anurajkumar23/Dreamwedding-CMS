@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback ,useRef} from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 
 interface GalleryImageProps {
   photos: string[];
   category: string;
-  onChange: (newPhotos: string[]) => void;
+  deletePhotos: (newPhotos: number[]) => void;
 }
 
 const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange }) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null);
+  const [localPhotos, setLocalPhotos] = useState<string[]>(photos);
+  const deletePhotoIndex=useRef<number[]>();
 
   const openLightbox = useCallback((index: number) => {
     setCurrentImage(index);
@@ -22,15 +24,21 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
   }, []);
 
   const removeImage = (index: number) => {
-    const updatedPhotos = photos.filter((_, idx) => idx !== index);
-    onChange(updatedPhotos); // Update photos array in the form
+    const updatedPhotos = localPhotos.filter((_, idx) => idx !== index);
+    setLocalPhotos(updatedPhotos); 
+    deletePhotoIndex.current.push(index);
+  };
+
+  const handleUpdate = () => {
+   
+    deletePhotos( deletePhotoIndex.current); 
   };
 
   return (
     <div>
       <section id="photos">
         <div className="columns-2 gap-1 sm:columns-3">
-          {photos.map((imageUrl, idx) => {
+          {localPhotos.map((imageUrl, idx) => {
             // Detect if the image URL is a blob (local file) or a server-hosted image
             const isBlobUrl = imageUrl.startsWith("blob:");
             const photoUrl = isBlobUrl
@@ -65,9 +73,9 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
           <div className="relative w-full h-full">
             <Image
               src={
-                photos[currentImage]?.startsWith("blob:")
-                  ? photos[currentImage]
-                  : `/images/${category}/media/${photos[currentImage]}`
+                localPhotos[currentImage]?.startsWith("blob:")
+                  ? localPhotos[currentImage]
+                  : `/images/${category}/media/${localPhotos[currentImage]}`
               }
               alt={`Photo ${currentImage}`}
               layout="fill"
@@ -83,6 +91,14 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
           </div>
         </div>
       )}
+      <div className="mt-4">
+        <button
+          className="bg-blue-500 text-white p-2 rounded"
+          onClick={handleUpdate}
+        >
+          Update
+        </button>
+      </div>
     </div>
   );
 };
