@@ -57,7 +57,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       { success: true, message: "Update Success", data: updatedDocument },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error occurred:", error);
     return NextResponse.json(
       { success: false, message: error.message || "Internal Server Error" },

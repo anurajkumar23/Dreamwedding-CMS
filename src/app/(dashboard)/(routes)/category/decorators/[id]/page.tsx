@@ -9,7 +9,7 @@ export default async function page({ params }: { params: { id: string } }) {
   await connectToDB();
   
 
-  let decorator:DecoratorDocument ;
+  let decorator:DecoratorDocument | null =null;
 
   if (params.id !== 'new') {
     decorator = await Decorator.findById(params.id).lean();

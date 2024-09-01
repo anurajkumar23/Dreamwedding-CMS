@@ -1,7 +1,7 @@
 import { filter } from "@/utils/filterMiddleware";
 import upload from "@/utils/upload";
 
-export async function JsonFilter(data, actionType, fieldsToRemove) {
+export async function JsonFilter(data:any, actionType:string, fieldsToRemove:string[]) {
   if (actionType === "restricted") {
     fieldsToRemove.forEach((field) => {
       if (field in data) {
