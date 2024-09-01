@@ -10,106 +10,150 @@ import { toast } from "react-hot-toast";
 import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
-import Image from "next/image";
 import GalleryImage from "@/components/Gallery/Gallary";
-import Dropzone from "../../../../../../components/Gallery/DropZone";
+import Dropzone from "@/components/Gallery/DropZone";
+import { DecoratorDocument } from "@/interfaces/decorators";
 
-const formSchema = z.object({
-    name: z.string().min(2, "Name is required").max(40),
-    innerdescription: z.string().optional(),
-    outerdescription: z.string().optional(),
-    rating: z.number().min(1, "Rating must be at least 1").max(5).default(4.5),
-    location: z.object({
-        city: z.string().optional(),
-        pincode: z.string().optional(),
-        area: z.string().optional(),
-    }),
-    price: z.array(z.number()).nonempty("At least one price is required"),
-    contactUs: z.number().optional(),
-    yearOfEstd: z.number().optional(),
-    billboard: z.string().max(255).optional(),
-    photos: z.array(z.string()).optional(),
-});
 
+// Define DecoratorFormValues type based on zod schema
 type DecoratorFormValues = z.infer<typeof formSchema>;
 
-interface DecoratorFormProps {
-    initialData: any;
-}
+const formSchema = z.object({
+  name: z.string().min(2, "Name is required").max(40),
+  innerdescription: z.string().optional(),
+  outerdescription: z.string().optional(),
+  rating: z.preprocess((val) => parseFloat(val as string), z.number().min(1, "Rating must be at least 1").max(5).default(4.5)),
+  location: z.object({
+    city: z.string().optional(),
+    pincode: z.string().optional(),
+    area: z.string().optional(),
+  }),
+  price: z.array(z.number()).nonempty("At least one price is required"),
+  contactUs: z.string().optional(), // Use string for phone numbers to accommodate different formats
+  yearOfEstd: z.number().optional(),
+ 
+});
 
-const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
-    const router = useRouter();
-    const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+const DecoratorForm = ({ initialData }: { initialData: DecoratorDocument }) => {
 
-    const title = initialData ? "Edit Decorator" : "Create Decorator";
-    const description = initialData ? "Edit an existing decorator." : "Add a new decorator";
-    const toastMessage = initialData ? "Decorator updated." : "Decorator created.";
-    const action = initialData ? "Save changes" : "Create";
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(initialData?.rating || 4.5);
+  
 
-    const form = useForm<DecoratorFormValues>({
-        resolver: zodResolver(formSchema),
-        defaultValues: initialData || {
-            name: "",
-            innerdescription: "",
-            outerdescription: "",
-            rating: 4.5,
-            location: {
-                city: "",
-                pincode: "",
-                area: "",
-            },
-            price: [1500],
-            contactUs: "",
-            yearOfEstd: null,
-            billboard: "",
-            photos: [],
-        },
-    });
+  const title = initialData ? "Edit Decorator" : "Create Decorator";
+  const description = initialData ? "Edit an existing decorator." : "Add a new decorator";
+  const toastMessage = initialData ? "Decorator updated." : "Decorator created.";
+  const action = initialData ? "Save changes" : "Create";
 
-    const onSubmit = async (data: DecoratorFormValues) => {
-        try {
-            setLoading(true);
-            if (initialData) {
-                await axios.patch(`/api/decor/${initialData.id}`, data);
-            } else {
-                await axios.post(`/api/decor`, data);
-            }
-            router.refresh();
-            router.push(`/category/decorators`);
-            toast.success(toastMessage);
-        } catch (error: any) {
-            toast.error("Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
+  const form = useForm<DecoratorFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: initialData || {
+      name: "",
+      innerdescription: "",
+      outerdescription: "",
+    //   rating: 4.5,
+      location: {
+        city: "",
+        pincode: "",
+        area: "",
+      },
+      price: [1500],
+      contactUs: "",
+      yearOfEstd: undefined,
+    },
+  });
+
+  const onSubmit = async (data: DecoratorFormValues) => {
+    console.log(data, "decorators");
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     };
+    try {
+      setLoading(true);
+      if (initialData) {
+        await axios.patch(`http://localhost:3000/api/decor/${initialData._id}`, data, config);
+      } else {
+        await axios.post(`/api/decor`, data);
+      }
+      router.refresh();
+      router.push(`/category/decorators`);
+      toast.success(toastMessage);
+    } catch (error: any) {
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const onDelete = async () => {
-        try {
-            setLoading(true);
-            await axios.delete(`/api/decor/${initialData?.id}`);
-            router.refresh();
-            router.push(`/category/decorators`);
-            toast.success("Decorator deleted.");
-        } catch (error: any) {
-            toast.error("Make sure to remove all related data first.");
-        } finally {
-            setLoading(false);
-            setOpen(false);
-        }
+  
+  
+  const onRatingSubmit = async () => {
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     };
+  
+    try {
+      setLoading(true);
+  
+      // Ensure Decorator is defined correctly
+      const response = await axios.patch(
+        `http://localhost:3000/api/adminRating/${initialData._id}?name=Decorator`, // Make sure 'Decorator' is a string if it's the model name
+        { adminRating: rating }, // Assuming rating is a state variable holding the new rating
+        config
+      );
+  
+      // Check if response is successful
+      if (response.status === 200) {
+        toast.success("Rating updated successfully.");
+      } else {
+        toast.error("Failed to update rating.");
+      }
+    } catch (error: any) {
+      console.error("Error updating rating:", error); // Log error for debugging
+      toast.error("Failed to update rating.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/decor/${initialData._id}`);
+      router.refresh();
+      router.push(`/category/decorators`);
+      toast.success("Decorator deleted.");
+    } catch (error: any) {
+      toast.error("Make sure to remove all related data first.");
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
 
     return (
         <>
@@ -131,66 +175,14 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <div className="md:grid-cols-10 grid gap-4 container">
-                        <div className="text-[#b7bac1] md:col-span-4 w-full h-auto relative rounded-lg overflow-hidden mb-5">
-                            <FormField
-                                control={form.control}
-                                name="photos"
-                                render={({ field: { value, onChange, } }) => (
-                                    <FormItem>
-                                        <FormLabel>Photos</FormLabel>
-                                        <FormControl>
-                                            {value && Array.isArray(value) && value.length > 0 ? (
-                                                <>
-                                                    <GalleryImage
-                                                        photos={value}
-                                                        category="decorator"
-                                                        onChange={(newPhotos) => onChange(newPhotos)}
-                                                    />
-                                                    <Dropzone
-                                                        onDrop={(files) => {
-                                                            const newImages = Array.from(files).map((file) =>
-                                                                URL.createObjectURL(file)
-                                                            );
-                                                            onChange([...(value || []), ...newImages]);
-                                                        }}
-                                                        onChange={(files) => {
-                                                            const newImages = Array.from(files).map((file) =>
-                                                                URL.createObjectURL(file)
-                                                            );
-                                                            onChange([...(value || []), ...newImages]);
-                                                        }}
-                                                    />
-                                                </>
-                                            ) : (
-                                                <Dropzone
-                                                    onDrop={(files) => {
-                                                        const newImages = Array.from(files).map((file) =>
-                                                            URL.createObjectURL(file)
-                                                        );
-                                                        onChange(newImages);
-                                                    }}
-                                                    onChange={(files) => {
-                                                        const newImages = Array.from(files).map((file) =>
-                                                            URL.createObjectURL(file)
-                                                        );
-                                                        onChange(newImages);
-                                                    }}
-                                                />
-                                            )}
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                        </div>
-                        <div className="md:grid md:col-span-6 container flex-1 bg-slate-800 p-5 rounded-lg font-bold text-[#b7bac1] h-max gap-8">
+                        
+                        <div className="md:grid md:col-span-6 container flex-1 bg-slate-800 p-5 rounded-lg font-bold  h-max gap-8">
                             <FormField
                                 control={form.control}
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Decorator Name</FormLabel>
+                                        <FormLabel className="text-gray-500">Decorator Name</FormLabel>
                                         <FormControl>
                                             <Input disabled={loading} placeholder="Name" {...field} />
                                         </FormControl>
@@ -203,7 +195,7 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                                 name="outerdescription"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Outer Description</FormLabel>
+                                        <FormLabel className="text-gray-500">Outer Description</FormLabel>
                                         <FormControl>
                                             <Input disabled={loading} placeholder="Outer Description" {...field} />
                                         </FormControl>
@@ -216,7 +208,7 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                                 name="innerdescription"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Inner Description</FormLabel>
+                                        <FormLabel className="text-gray-500">Inner Description</FormLabel>
                                         <FormControl>
                                             <Input disabled={loading} placeholder="Description" {...field} />
                                         </FormControl>
@@ -224,25 +216,25 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="rating"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Rating</FormLabel>
+                                        <FormLabel className="text-gray-500" >Rating</FormLabel>
                                         <FormControl>
-                                            <Input disabled={loading} placeholder="Rating" {...field} />
+                                            <Input disabled={loading} placeholder="Rating" {...field}  type="number"/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                             <FormField
                                 control={form.control}
                                 name="yearOfEstd"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Year Of ESTD.</FormLabel>
+                                        <FormLabel className="text-gray-500">Year Of ESTD.</FormLabel>
                                         <FormControl>
                                             <Input disabled={loading} placeholder="2020" {...field} />
                                         </FormControl>
@@ -255,7 +247,7 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                                 name="price"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Price (Array)</FormLabel>
+                                        <FormLabel className="text-gray-500">Price (Array)</FormLabel>
                                         <FormControl>
                                             <div className="space-y-4">
                                                 {(field.value || []).map((item, index) => (
@@ -302,29 +294,17 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="contactUs"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>contact Us</FormLabel>
-                                        <FormControl>
-                                            <Input disabled={loading} placeholder="9123456789" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                          
                         </div>
                     </div>
 
-                    <div className="my-4 container bg-slate-800 p-5 rounded-lg font-bold text-[#b7bac1]">
+                    <div className="my-4 container bg-slate-800 p-5 rounded-lg font-bold ">
                         <FormField
                             control={form.control}
                             name="location.city"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>City</FormLabel>
+                                    <FormLabel className="text-gray-500">City</FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="City" {...field} />
                                     </FormControl>
@@ -337,7 +317,7 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                             name="location.pincode"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Pincode</FormLabel>
+                                    <FormLabel className="text-gray-500">Pincode</FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="Pincode" {...field} />
                                     </FormControl>
@@ -350,7 +330,7 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                             name="location.area"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Area</FormLabel>
+                                    <FormLabel className="text-gray-500">Area</FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="Area" {...field} />
                                     </FormControl>
@@ -359,11 +339,38 @@ const DecoratorForm: React.FC<DecoratorFormProps> = ({ initialData }) => {
                             )}
                         />
                     </div>
-                    <Button disabled={loading} type="submit">
+                    <Button disabled={loading} type="submit" className="bg-gray-500">
                         {action}
                     </Button>
                 </form>
             </Form>
+            <div className="mt-8">
+        <h2 className="text-xl font-bold text-white">Update Admin Rating (Range:1 to 5)</h2>
+        <h2 className="text-xl font-bold text-white">Type 1 to Delete the Rating </h2>
+        <Form {...form}>
+          <form onSubmit={(e) => { e.preventDefault(); onRatingSubmit(); }} className="space-y-4">
+            <FormItem>
+              <FormLabel className="text-gray-500">Admin Rating</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  step="0.1"
+                  min="1"
+                  max="5"
+                  value={rating}
+                  onChange={(e) => setRating(parseFloat(e.target.value))}
+                  disabled={loading}
+                  placeholder="Enter new rating (1-5)"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            <Button type="submit" disabled={loading} className="bg-gray-500">
+              Update Rating
+            </Button>
+          </form>
+        </Form>
+      </div>
         </>
     );
 };
