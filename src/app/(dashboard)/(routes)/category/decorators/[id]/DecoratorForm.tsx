@@ -65,7 +65,7 @@ const DecoratorForm = ({ initialData }: { initialData: DecoratorDocument }) => {
       name: "",
       innerdescription: "",
       outerdescription: "",
-    //   rating: 4.5,
+      // rating: 4.5,
       location: {
         city: "",
         pincode: "",
@@ -91,7 +91,7 @@ const DecoratorForm = ({ initialData }: { initialData: DecoratorDocument }) => {
       if (initialData) {
         await axios.patch(`http://localhost:3000/api/decor/${initialData._id}`, data, config);
       } else {
-        await axios.post(`/api/decor`, data);
+        await axios.post(`http://localhost:3000/api/decor`, data,config);
       }
       router.refresh();
       router.push(`/category/decorators`);
@@ -140,9 +140,17 @@ const DecoratorForm = ({ initialData }: { initialData: DecoratorDocument }) => {
 
 
   const onDelete = async () => {
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+  
     try {
       setLoading(true);
-      await axios.delete(`/api/decor/${initialData._id}`);
+      await axios.delete(`http://localhost:3000/api/decor/${initialData._id}`,config);
       router.refresh();
       router.push(`/category/decorators`);
       toast.success("Decorator deleted.");
