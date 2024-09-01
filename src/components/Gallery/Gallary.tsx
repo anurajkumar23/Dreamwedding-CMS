@@ -7,13 +7,15 @@ import { X } from "lucide-react";
 interface GalleryImageProps {
   photos: string[];
   category: string;
-  deletePhotos: (newPhotos: number[]) => void;
+  handleDeletedPhotos: (newPhotos: string[]) => void;
 }
 
-const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange }) => {
+const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDeletedPhotos }) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null);
   const [localPhotos, setLocalPhotos] = useState<string[]>(photos);
-  const deletePhotoIndex=useRef<number[]>();
+  const [deletePhotoIndex,setDeletePhotoIndex]=useState<string[] >([]);
+
+
 
   const openLightbox = useCallback((index: number) => {
     setCurrentImage(index);
@@ -23,15 +25,15 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
     setCurrentImage(null);
   }, []);
 
-  const removeImage = (index: number) => {
+  const removeImage = (index: number,imageUrl:string) => {
     const updatedPhotos = localPhotos.filter((_, idx) => idx !== index);
     setLocalPhotos(updatedPhotos); 
-    deletePhotoIndex.current.push(index);
+    setDeletePhotoIndex((prev) => [...prev, imageUrl]);
   };
 
   const handleUpdate = () => {
-   
-    deletePhotos( deletePhotoIndex.current); 
+
+    handleDeletedPhotos( deletePhotoIndex); 
   };
 
   return (
@@ -44,7 +46,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
             const photoUrl = isBlobUrl
               ? imageUrl
               : `/images/${category}/media/${imageUrl}`;
-            console.log("Rendering image:", photoUrl);
+           
 
             return (
               <div key={idx} className="relative mb-4">
@@ -59,7 +61,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, onChange 
                 />
                 <button
                   className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full"
-                  onClick={() => removeImage(idx)}
+                  onClick={() => removeImage(idx,imageUrl)}
                 >
                   <X size={20} />
                 </button>

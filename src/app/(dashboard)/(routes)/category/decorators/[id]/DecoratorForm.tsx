@@ -103,36 +103,7 @@ const DecoratorForm = ({ initialData }: { initialData: DecoratorDocument }) => {
     }
   };
 
-  const onPhotoSubmit = async (newPhotos: string[]) => {
-    const token = localStorage.getItem("jwt_token");
   
-    // Create a FormData object to handle file uploads
-    const formData = new FormData();
-    newPhotos.forEach((photo) => {
-      formData.append("photos", photo); // Append each photo to the form data
-    });
-  
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data", // Correct content type for file uploads
-      },
-    };
-  
-    try {
-      setLoading(true);
-  
-      // Send a PATCH request with FormData
-      await axios.patch(`http://localhost:3000/api/decor/photos/${initialData._id}`, formData, config);
-      
-      setPhotos(newPhotos);
-      toast.success("Photos updated successfully.");
-    } catch (error: any) {
-      toast.error("Failed to update photos.");
-    } finally {
-      setLoading(false);
-    }
-  };
   
   const onRatingSubmit = async () => {
     const token = localStorage.getItem("jwt_token");

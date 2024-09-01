@@ -5,19 +5,50 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import GalleryImage from "@/components/Gallery/Gallary";
+import Image from "next/image";
 
 interface PhotoFormProps {
   initialPhotos: string[];
   decoratorId: string;
 }
 
-const PhotoForm: React.FC<PhotoFormProps> = ({ initialPhotos, decoratorId }) => {
+const PhotoForm: React.FC<PhotoFormProps> = ({
+  initialPhotos,
+  decoratorId,
+}) => {
   const [photos, setPhotos] = useState(initialPhotos);
 
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
   const [newPhotosPreviews, setNewPhotosPreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [deletedPhotos, setDeletedPhotos] = useState<number[]>([]);
+
+  async function handleDeletedPhotos(deletephotos: string[]) {
+    const token = localStorage.getItem("jwt_token");
+    console.log(deletephotos,"frontend")
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      setLoading(true);
+
+      await axios.patch(
+        `http://localhost:3000/api/decor/photos/${decoratorId}/delete`,
+        deletephotos,
+        config
+      );
+
+      setPhotos(photos);
+      toast.success("Photos updated successfully.");
+    } catch (error: any) {
+      toast.error("Failed to update photos.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -26,18 +57,16 @@ const PhotoForm: React.FC<PhotoFormProps> = ({ initialPhotos, decoratorId }) => 
       setNewPhotos((prevPhotos) => [...prevPhotos, ...newFileList]);
       setNewPhotosPreviews((prevPreviews) => [
         ...prevPreviews,
-        ...newFileList.map(file => URL.createObjectURL(file)),
+        ...newFileList.map((file) => URL.createObjectURL(file)),
       ]);
     }
   };
 
   const removeFile = (fileToRemove: File, index: number) => {
     setNewPhotos((prevPhotos) => prevPhotos.filter((file, i) => i !== index));
-    setNewPhotosPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
-  };
-
-  const handleDeletePhotos = (deletedIndices: number[]) => {
-    setDeletedPhotos(deletedIndices); // Update the state with deleted photo indices
+    setNewPhotosPreviews((prevPreviews) =>
+      prevPreviews.filter((_, i) => i !== index)
+    );
   };
 
   const onPhotoSubmit = async () => {
@@ -58,7 +87,11 @@ const PhotoForm: React.FC<PhotoFormProps> = ({ initialPhotos, decoratorId }) => 
 
     try {
       setLoading(true);
-      await axios.patch(`http://localhost:3000/api/decor/photos/${decoratorId}`, formData, config);
+      await axios.patch(
+        `http://localhost:3000/api/decor/photos/${decoratorId}`,
+        formData,
+        config
+      );
       setPhotos([...photos, ...newPhotosPreviews]);
       setNewPhotos([]);
       setNewPhotosPreviews([]);
@@ -78,7 +111,7 @@ const PhotoForm: React.FC<PhotoFormProps> = ({ initialPhotos, decoratorId }) => 
         <GalleryImage
           photos={photos}
           category="decorator"
-          deletePhotos={handleDeletePhotos}
+          handleDeletedPhotos={handleDeletedPhotos}
         />
 
         <label className="text-gray-500">Add New Photos</label>
@@ -97,7 +130,13 @@ const PhotoForm: React.FC<PhotoFormProps> = ({ initialPhotos, decoratorId }) => 
             <div className="flex flex-wrap gap-2">
               {newPhotosPreviews.map((preview, index) => (
                 <div key={index} className="relative">
-                  <img src={preview} alt={`Preview ${index}`} className="w-32 h-32 object-cover rounded-lg" />
+                  <Image
+                    width={500}
+                    height={500}
+                    src={preview}
+                    alt={`Preview ${index}`}
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
                   <button
                     type="button"
                     onClick={() => removeFile(newPhotos[index], index)}
