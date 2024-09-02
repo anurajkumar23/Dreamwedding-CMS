@@ -52,28 +52,6 @@ export const navLinks: NavLink[] = [
     label: "Seller",
   },
   {
-    url: "/sellerRequest",
-    icon: <Shapes />,  // Consider changing this icon to distinguish it from "Category"
-    label: "Seller Request",
-    innerLinks: [
-      {
-        url: "/sellerRequest/pending",
-        icon: <Building />, // Consider using a different icon here
-        label: "Pending",
-      },
-      {
-        url: "/sellerRequest/accepted",
-        icon: <SprayCan />,
-        label: "Accepted",
-      },
-      {
-        url: "/sellerRequest/rejected",
-        icon: <Utensils />,
-        label: "Rejected",
-      },
-    ],
-  },
-  {
     url: "/orders",
     icon: <ShoppingBag />,
     label: "Orders",
