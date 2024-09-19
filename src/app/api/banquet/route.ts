@@ -1,6 +1,7 @@
 import banquetMiddleware from "@/app/middleware/Banquet/banquetMiddleware";
 import Banquet from "@/models/banquet";
 import { connectToDB } from "@/utils/database";
+import { handlePost } from "@/utils/request";
 import { NextRequest, NextResponse } from "next/server";
 
 connectToDB();
@@ -8,7 +9,7 @@ connectToDB();
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    console.log(searchParams, "params");
+    // console.log(searchParams, "params");
 
     const filters: any = {};
     let sort: any = {}; // To hold sorting criteria

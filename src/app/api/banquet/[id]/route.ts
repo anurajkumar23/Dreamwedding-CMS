@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const { id } = params;
     const updatedData = await banquetMiddleware(req)
     const banquet = await handlePatch(Banquet, id, "banquet" ,updatedData );
-    console.log(banquet,"‼‼‼‼‼")
+    // console.log(banquet,"‼‼‼‼‼")
     return NextResponse.json({ success: true, message: "update Success" ,data:banquet }, { status: 200 });
   } catch (error) {
     console.error("Error occurred:", error);
