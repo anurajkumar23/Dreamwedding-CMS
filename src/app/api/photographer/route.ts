@@ -49,8 +49,6 @@ export async function GET(req: Request) {
       }
     }
 
-    console.log(filters, "filters");
-    console.log(sort, "sort");
 
     // Fetch photographer data based on filters and sorting
     const photographers = await Photographer.find(filters).sort(sort);

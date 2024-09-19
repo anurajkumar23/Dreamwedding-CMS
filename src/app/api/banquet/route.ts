@@ -48,10 +48,6 @@ export async function GET(req: Request) {
           break;
       }
     }
-
-    console.log(filters, "filters");
-    console.log(sort, "sort");
-
     // Fetch banquet data based on filters and sorting
     const banquet = await Banquet.find(filters).sort(sort);
 

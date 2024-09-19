@@ -47,10 +47,6 @@ export async function GET(req: Request) {
           break;
       }
     }
-
-    console.log(filters, "filters");
-    console.log(sort, "sort");
-
     // Fetch decorator data based on filters and sorting
     const decorators = await Decorator.find(filters).sort(sort);
 
