@@ -9,6 +9,7 @@ const CatererSchema = new Schema({
   },
 
   price: Number,
+  
 
   veg: {
     starter: [String],

@@ -26,8 +26,7 @@ const PhotographerSchema = new Schema({
 },
   location: { city: String, pincode: String, area: String },
   locationUrl: String,
-  outerdescription: String,
-  innerdescription:String,
+  description: String,
   feature:[String],
   price: [Number],
   like: [
