@@ -32,15 +32,15 @@ export const setResponseHeaders = (token: string): { Authorization: string } => 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     // Extract data from the request body
-    const { email, password, name, phone } = await req.json();
+    const { email, password, name, phoneNumber } = await req.json();
 
     // Check if all required fields are provided
-    if (!email || !password || !name || !phone) {
+    if (!email || !password || !name || !phoneNumber) {
       return NextResponse.json({ success: false, message: 'Please fill all the fields' }, { status: 403 });
     }
 
     // Create a new user
-    const newUser = await User.create({ email, phone, password, name, googleLogIn: false });
+    const newUser = await User.create({ email, phoneNumber, password, name, googleLogIn: false });
 
     // Sign a JWT token for the user
     const token = signToken(newUser._id, newUser.role);

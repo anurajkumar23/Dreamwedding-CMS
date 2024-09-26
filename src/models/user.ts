@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 import argon2 from 'argon2';
 import crypto from 'crypto';
-import { boolean } from "yup";
+
 
 const bankSchema = new Schema({
   name: {
@@ -106,6 +106,10 @@ const UserSchema = new Schema({
   name: {
     type: String,
   },
+  phoneNumber: {
+    type: String,
+    required: [true, "Phone number is required!"],
+  },
   sellerRequest: {
     type: String,
     enum: ['none', 'pending', 'accepted'],
@@ -115,15 +119,15 @@ const UserSchema = new Schema({
    
     personalInfo: {
       type: personalInfoSchema,
-      required: true,
+      required: false,
     },
     importantInfo: {
       type: importantInfoSchema,
-      required: true,
+      required: false,
     },
     governmentInfo: {
       type: governmentInfoSchema,
-      required: true,
+      required: false,
     },
   },
   googleLogIn: {

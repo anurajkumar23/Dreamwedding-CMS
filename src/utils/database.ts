@@ -1,22 +1,30 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-let isConnected = false; // track the connection
+const MONGODB_URI = process.env.MONGODB_URI;
 
 export const connectToDB = async () => {
-  // mongoose.set('strictQuery', true);
-  if (isConnected) {
-    console.log('Mongo already connected');
+  const connectionState = mongoose.connection.readyState;
+
+  if (connectionState === 1) {
+    console.log("Already connected");
     return;
   }
+
+  if (connectionState === 2) {
+    console.log("Connecting....");
+    return;
+  }
+
   try {
-    const { connection} = await mongoose.connect(process.env.MONGODB_URI!, {
-      dbName: 'Dreamwedding',
+    mongoose.connect(MONGODB_URI!, {
+      dbName: "Dreamwedding",
+      bufferCommands: true,
     });
-    isConnected = true;
-    console.log('MongoDB connected');
-    // console.log(connection)
-  } catch (error:any) {
-    console.log("Not Connected")
-    console.log(error.errmsg);
+    console.log("Connected");
+  } catch (err: any) {
+    console.log("Error: ", err);
+    throw new Error("Error: ", err);
   }
 };
+
+
